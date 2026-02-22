@@ -1,0 +1,1330 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>KCC CMS — Admin Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;600;700;800;900&family=Source+Sans+3:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet" />
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#05285E',
+            secondary: '#18396F',
+            accent1: '#FAE9A1',
+            accent2: '#FEE773',
+          },
+          fontFamily: {
+            display: ['"Nunito Sans"', 'sans-serif'],
+            sans: ['"Source Sans 3"', 'sans-serif'],
+          },
+        },
+      },
+    };
+  </script>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Source Sans 3', sans-serif;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    .font-display {
+      font-family: 'Nunito Sans', sans-serif;
+    }
+
+    .sidebar-link {
+      transition: all 0.15s;
+      border-right: 3px solid transparent;
+    }
+
+    .sidebar-link:hover {
+      background: rgba(254, 231, 115, 0.10);
+      color: #FEE773;
+    }
+
+    .sidebar-link.active {
+      background: rgba(254, 231, 115, 0.14);
+      color: #FEE773;
+      border-right-color: #FEE773;
+      font-weight: 700;
+    }
+
+    .panel {
+      display: none;
+    }
+
+    .panel.active {
+      display: block;
+    }
+
+    .modal-bg {
+      display: none;
+    }
+
+    .modal-bg.open {
+      display: flex;
+    }
+
+    .tab-btn.active {
+      background: #05285E;
+      color: #FEE773;
+    }
+
+    input:focus,
+    textarea:focus,
+    select:focus {
+      outline: none;
+      border-color: #05285E !important;
+      box-shadow: 0 0 0 3px rgba(5, 40, 94, 0.10);
+    }
+
+    .stat-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(5, 40, 94, 0.12);
+    }
+
+    .tbl-row:hover {
+      background: #f8f9ff;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 2px 10px;
+      border-radius: 99px;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    #toast {
+      transition: opacity 0.3s;
+    }
+
+    ::-webkit-scrollbar {
+      width: 5px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 9px;
+    }
+  </style>
+</head>
+
+<body class="bg-slate-100 min-h-screen flex">
+
+  <!-- ════════════════════════════
+     SIDEBAR
+════════════════════════════ -->
+  <aside
+    class="w-64 min-h-screen bg-[#05285E] fixed top-0 left-0 bottom-0 z-40 flex flex-col shadow-2xl overflow-y-auto">
+    <!-- Brand -->
+    <div class="px-5 py-5 border-b border-yellow-100/10 flex items-center gap-3 flex-shrink-0">
+      <img src="./assets/img/logo.png" alt="Logo" class="w-10 h-10 sm:w-14 sm:h-14 object-contain" />
+      <div>
+        <div class="font-display font-bold text-white text-xs leading-tight">KCC Admin CMS</div>
+        <div class="text-yellow-100/40 text-xs">Kabankalan Catholic College</div>
+      </div>
+    </div>
+
+    <!-- Nav -->
+    <nav class="flex-1 py-4 px-2 space-y-0.5">
+      <div class="px-3 py-1.5 text-yellow-100/30 text-xs font-black uppercase tracking-widest">Main</div>
+      <a href="#"
+        class="sidebar-link nav-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-yellow-100/70 text-sm"
+        data-panel="dashboard">
+        <span>🏠</span> Dashboard
+      </a>
+      <a href="#"
+        class="sidebar-link nav-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-yellow-100/70 text-sm"
+        data-panel="preview">
+        <span>🌐</span> Website Preview
+      </a>
+
+      <div class="px-3 py-1.5 mt-3 text-yellow-100/30 text-xs font-black uppercase tracking-widest">Content</div>
+      <a href="#"
+        class="sidebar-link nav-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-yellow-100/70 text-sm"
+        data-panel="news">
+        <span>📰</span> News &amp; Announcements
+      </a>
+      <a href="#"
+        class="sidebar-link nav-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-yellow-100/70 text-sm"
+        data-panel="events">
+        <span>📅</span> Events &amp; Calendar
+      </a>
+      <a href="#"
+        class="sidebar-link nav-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-yellow-100/70 text-sm"
+        data-panel="programs">
+        <span>🎓</span> Programs &amp; Courses
+      </a>
+      <a href="#"
+        class="sidebar-link nav-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-yellow-100/70 text-sm"
+        data-panel="gallery">
+        <span>🖼️</span> Media &amp; Gallery
+      </a>
+
+      <div class="px-3 py-1.5 mt-3 text-yellow-100/30 text-xs font-black uppercase tracking-widest">People</div>
+      <a href="#"
+        class="sidebar-link nav-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-yellow-100/70 text-sm"
+        data-panel="enrollment">
+        <span>📋</span> Enrollment &amp; Students
+      </a>
+      <a href="#"
+        class="sidebar-link nav-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-yellow-100/70 text-sm"
+        data-panel="faculty">
+        <span>👩‍🏫</span> Faculty &amp; Staff
+      </a>
+
+      <div class="px-3 py-1.5 mt-3 text-yellow-100/30 text-xs font-black uppercase tracking-widest">System</div>
+      <a href="#"
+        class="sidebar-link nav-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-yellow-100/70 text-sm"
+        data-panel="settings">
+        <span>⚙️</span> Settings
+      </a>
+    </nav>
+
+    <!-- User -->
+    <div class="px-4 py-4 border-t border-yellow-100/10 flex-shrink-0">
+      <div class="flex items-center gap-3">
+        <div
+          class="w-8 h-8 rounded-full bg-yellow-300 flex items-center justify-center text-[#05285E] font-black text-sm flex-shrink-0">
+          A</div>
+        <div class="flex-1 min-w-0">
+          <div class="text-white text-xs font-bold truncate">Administrator</div>
+          <div class="text-yellow-100/40 text-xs truncate">admin @ kcc.edu.ph</div>
+        </div>
+        <a href="/index.html" id="logout-btn" class="text-yellow-100/40 hover:text-yellow-300 text-xs transition-colors"
+          title="Logout">↩</a>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ════════════════════════════
+     MAIN AREA
+════════════════════════════ -->
+  <div class="ml-64 flex-1 flex flex-col min-h-screen">
+
+    <!-- Top bar -->
+    <header
+      class="bg-white border-b border-gray-200 px-8 py-4 flex items-center justify-between sticky top-0 z-30 shadow-sm">
+      <div>
+        <h1 id="page-title" class="font-display font-bold text-[#05285E] text-xl">Dashboard</h1>
+        <p id="page-sub" class="text-gray-400 text-xs mt-0.5">Welcome back, Administrator</p>
+      </div>
+      <div class="flex items-center gap-3">
+        <input type="text" placeholder="Search..."
+          class="bg-slate-100 border border-transparent rounded-xl px-4 py-2 text-sm w-44" />
+        <button id="add-btn"
+          class="bg-[#05285E] text-yellow-300 font-bold px-4 py-2 rounded-xl text-sm hover:bg-[#18396F] transition-colors">+
+          Add New</button>
+        <div
+          class="w-9 h-9 rounded-full bg-yellow-300 flex items-center justify-center text-[#05285E] font-black text-sm">
+          A</div>
+      </div>
+    </header>
+
+    <!-- Panels -->
+    <main class="flex-1 p-8">
+
+      <!-- ── DASHBOARD ── -->
+      <div id="panel-dashboard" class="panel active">
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-5 mb-8">
+          <div class="stat-card bg-white rounded-2xl p-6 border-l-4 border-[#05285E] shadow-sm transition-all">
+            <div class="flex justify-between mb-3"><span class="text-2xl">👨‍🎓</span><span
+                class="badge bg-green-100 text-green-700">+12%</span></div>
+            <div class="font-display font-black text-3xl text-[#05285E]">4,218</div>
+            <div class="text-gray-400 text-xs font-semibold uppercase tracking-wider mt-1">Total Students</div>
+          </div>
+          <div class="stat-card bg-white rounded-2xl p-6 border-l-4 border-yellow-300 shadow-sm transition-all">
+            <div class="flex justify-between mb-3"><span class="text-2xl">👩‍🏫</span><span
+                class="badge bg-blue-100 text-blue-700">+3</span></div>
+            <div class="font-display font-black text-3xl text-[#05285E]">284</div>
+            <div class="text-gray-400 text-xs font-semibold uppercase tracking-wider mt-1">Faculty &amp; Staff</div>
+          </div>
+          <div class="stat-card bg-white rounded-2xl p-6 border-l-4 border-[#18396F] shadow-sm transition-all">
+            <div class="flex justify-between mb-3"><span class="text-2xl">📝</span><span
+                class="badge bg-yellow-100 text-yellow-700">Active</span></div>
+            <div class="font-display font-black text-3xl text-[#05285E]">347</div>
+            <div class="text-gray-400 text-xs font-semibold uppercase tracking-wider mt-1">Enrollees This Sem</div>
+          </div>
+          <div class="stat-card bg-white rounded-2xl p-6 border-l-4 border-yellow-200 shadow-sm transition-all">
+            <div class="flex justify-between mb-3"><span class="text-2xl">🎓</span><span
+                class="badge bg-purple-100 text-purple-700">Active</span></div>
+            <div class="font-display font-black text-3xl text-[#05285E]">18</div>
+            <div class="text-gray-400 text-xs font-semibold uppercase tracking-wider mt-1">Programs Offered</div>
+          </div>
+        </div>
+
+        <div class="grid lg:grid-cols-3 gap-6">
+          <div class="lg:col-span-2 bg-white rounded-2xl shadow-sm overflow-hidden">
+            <div class="px-6 py-4 border-b border-gray-100 flex justify-between items-center">
+              <h3 class="font-bold text-[#05285E]">Recent Activity</h3>
+              <span class="text-xs text-gray-400">Today</span>
+            </div>
+            <div class="divide-y divide-gray-50">
+              <div class="px-6 py-4 flex items-start gap-4">
+                <div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-sm flex-shrink-0">📰
+                </div>
+                <div class="flex-1">
+                  <p class="text-sm text-gray-700"><strong>News post published:</strong> KCC Launches Engineering
+                    Technology Program</p>
+                  <p class="text-xs text-gray-400 mt-0.5">Admin · 2 hours ago</p>
+                </div>
+                <span class="badge bg-green-100 text-green-700">Published</span>
+              </div>
+              <div class="px-6 py-4 flex items-start gap-4">
+                <div class="w-8 h-8 rounded-full bg-yellow-100 flex items-center justify-center text-sm flex-shrink-0">
+                  👤</div>
+                <div class="flex-1">
+                  <p class="text-sm text-gray-700"><strong>New enrollment</strong> submitted by Maria Santos (BSN-1A)
+                  </p>
+                  <p class="text-xs text-gray-400 mt-0.5">System · 3 hours ago</p>
+                </div>
+                <span class="badge bg-yellow-100 text-yellow-700">Pending</span>
+              </div>
+              <div class="px-6 py-4 flex items-start gap-4">
+                <div class="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center text-sm flex-shrink-0">📅
+                </div>
+                <div class="flex-1">
+                  <p class="text-sm text-gray-700"><strong>Event updated:</strong> Career Fair rescheduled to March 22
+                  </p>
+                  <p class="text-xs text-gray-400 mt-0.5">Admin · Yesterday</p>
+                </div>
+                <span class="badge bg-blue-100 text-blue-700">Updated</span>
+              </div>
+              <div class="px-6 py-4 flex items-start gap-4">
+                <div class="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center text-sm flex-shrink-0">
+                  🖼️</div>
+                <div class="flex-1">
+                  <p class="text-sm text-gray-700"><strong>12 photos uploaded</strong> to Foundation Day album</p>
+                  <p class="text-xs text-gray-400 mt-0.5">Admin · Yesterday</p>
+                </div>
+                <span class="badge bg-purple-100 text-purple-700">Media</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="space-y-5">
+            <div class="bg-white rounded-2xl shadow-sm overflow-hidden">
+              <div class="px-6 py-4 border-b border-gray-100 font-bold text-[#05285E] text-sm">Enrollment by College
+              </div>
+              <div class="p-5 space-y-3">
+                <div>
+                  <div class="flex justify-between text-xs text-gray-400 mb-1"><span>Nursing</span><span
+                      class="font-bold text-[#05285E]">28%</span></div>
+                  <div class="h-2 bg-gray-100 rounded-full">
+                    <div class="h-full bg-[#05285E] rounded-full" style="width:28%"></div>
+                  </div>
+                </div>
+                <div>
+                  <div class="flex justify-between text-xs text-gray-400 mb-1"><span>Education</span><span
+                      class="font-bold text-[#05285E]">22%</span></div>
+                  <div class="h-2 bg-gray-100 rounded-full">
+                    <div class="h-full bg-[#18396F] rounded-full" style="width:22%"></div>
+                  </div>
+                </div>
+                <div>
+                  <div class="flex justify-between text-xs text-gray-400 mb-1"><span>Business</span><span
+                      class="font-bold text-[#05285E]">19%</span></div>
+                  <div class="h-2 bg-gray-100 rounded-full">
+                    <div class="h-full bg-yellow-300 rounded-full" style="width:19%"></div>
+                  </div>
+                </div>
+                <div>
+                  <div class="flex justify-between text-xs text-gray-400 mb-1"><span>IT</span><span
+                      class="font-bold text-[#05285E]">16%</span></div>
+                  <div class="h-2 bg-gray-100 rounded-full">
+                    <div class="h-full bg-yellow-200 rounded-full" style="width:16%"></div>
+                  </div>
+                </div>
+                <div>
+                  <div class="flex justify-between text-xs text-gray-400 mb-1"><span>Others</span><span
+                      class="font-bold text-[#05285E]">15%</span></div>
+                  <div class="h-2 bg-gray-100 rounded-full">
+                    <div class="h-full bg-gray-300 rounded-full" style="width:15%"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="bg-[#05285E] rounded-2xl p-5 text-white">
+              <h3 class="font-bold text-yellow-300 mb-3 text-sm">🗓 Upcoming Events</h3>
+              <div class="space-y-3">
+                <div class="flex gap-3 items-start">
+                  <div class="bg-yellow-300/15 rounded-lg px-2 py-1 text-center min-w-10 flex-shrink-0">
+                    <div class="font-display font-black text-yellow-300 text-lg leading-none">24</div>
+                    <div class="text-yellow-100/50 text-xs">Feb</div>
+                  </div>
+                  <div>
+                    <p class="text-yellow-100 text-xs font-semibold">Foundation Day Mass</p>
+                    <p class="text-yellow-100/40 text-xs">8:00 AM · Chapel</p>
+                  </div>
+                </div>
+                <div class="flex gap-3 items-start">
+                  <div class="bg-yellow-300/15 rounded-lg px-2 py-1 text-center min-w-10 flex-shrink-0">
+                    <div class="font-display font-black text-yellow-300 text-lg leading-none">10</div>
+                    <div class="text-yellow-100/50 text-xs">Mar</div>
+                  </div>
+                  <div>
+                    <p class="text-yellow-100 text-xs font-semibold">Final Examinations</p>
+                    <p class="text-yellow-100/40 text-xs">All Departments</p>
+                  </div>
+                </div>
+                <div class="flex gap-3 items-start">
+                  <div class="bg-yellow-300/15 rounded-lg px-2 py-1 text-center min-w-10 flex-shrink-0">
+                    <div class="font-display font-black text-yellow-300 text-lg leading-none">22</div>
+                    <div class="text-yellow-100/50 text-xs">Mar</div>
+                  </div>
+                  <div>
+                    <p class="text-yellow-100 text-xs font-semibold">Career Fair 2025</p>
+                    <p class="text-yellow-100/40 text-xs">Gym · All Day</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── PREVIEW ── -->
+      <div id="panel-preview" class="panel">
+        <div class="bg-white rounded-2xl shadow-sm overflow-hidden">
+          <div class="px-6 py-4 border-b flex items-center justify-between">
+            <div class="flex items-center gap-3">
+              <div class="flex gap-1.5">
+                <div class="w-3 h-3 rounded-full bg-red-400"></div>
+                <div class="w-3 h-3 rounded-full bg-yellow-400"></div>
+                <div class="w-3 h-3 rounded-full bg-green-400"></div>
+              </div>
+              <div class="bg-gray-100 rounded-lg px-4 py-1.5 text-xs text-gray-500 min-w-64">https://www.kcc.edu.ph
+              </div>
+            </div>
+          </div>
+          <div class="bg-[#05285E] p-16 text-center flex flex-col items-center justify-center min-h-96">
+            <div class="text-6xl mb-4 opacity-30">🌐</div>
+            <h2 class="font-display font-black text-white text-2xl mb-2">Website Preview</h2>
+            <p class="text-yellow-100/50 text-sm mb-6 max-w-sm">Changes made in the CMS are reflected on the live
+              website after publishing.</p>
+            <a href="kcc-tailwind.html" target="_blank"
+              class="bg-yellow-300 text-[#05285E] font-bold px-6 py-3 rounded-xl text-sm hover:bg-yellow-200 transition-colors">Open
+              KCC Website →</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── NEWS ── -->
+      <div id="panel-news" class="panel">
+        <div class="bg-white rounded-2xl shadow-sm mb-5 px-6 py-4 flex flex-wrap gap-3 items-center justify-between">
+          <div class="flex gap-2">
+            <button class="tab-btn active px-4 py-1.5 rounded-lg text-sm font-semibold border border-gray-200">All
+              (12)</button>
+            <button
+              class="tab-btn px-4 py-1.5 rounded-lg text-sm font-semibold border border-gray-200 text-gray-500">Published
+              (9)</button>
+            <button
+              class="tab-btn px-4 py-1.5 rounded-lg text-sm font-semibold border border-gray-200 text-gray-500">Draft
+              (3)</button>
+          </div>
+          <button
+            class="open-modal bg-[#05285E] text-yellow-300 font-bold px-5 py-2 rounded-xl text-sm hover:bg-[#18396F] transition-colors"
+            data-modal="modal-news">+ New Post</button>
+        </div>
+        <div class="bg-white rounded-2xl shadow-sm overflow-hidden">
+          <table class="w-full text-sm">
+            <thead class="bg-slate-50 border-b border-gray-100">
+              <tr>
+                <th class="text-left px-6 py-3.5 text-xs font-black text-gray-400 uppercase tracking-wider">Title</th>
+                <th class="text-left px-4 py-3.5 text-xs font-black text-gray-400 uppercase tracking-wider">Category
+                </th>
+                <th class="text-left px-4 py-3.5 text-xs font-black text-gray-400 uppercase tracking-wider">Author</th>
+                <th class="text-left px-4 py-3.5 text-xs font-black text-gray-400 uppercase tracking-wider">Date</th>
+                <th class="text-left px-4 py-3.5 text-xs font-black text-gray-400 uppercase tracking-wider">Status</th>
+                <th class="px-4 py-3.5"></th>
+              </tr>
+            </thead>
+            <tbody id="news-tbody" class="divide-y divide-gray-50"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ── EVENTS ── -->
+      <div id="panel-events" class="panel">
+        <div class="bg-white rounded-2xl shadow-sm mb-5 px-6 py-4 flex justify-between items-center">
+          <div class="flex gap-2">
+            <button class="tab-btn active px-4 py-1.5 rounded-lg text-sm font-semibold border border-gray-200">All
+              Events</button>
+            <button
+              class="tab-btn px-4 py-1.5 rounded-lg text-sm font-semibold border border-gray-200 text-gray-500">Upcoming</button>
+            <button
+              class="tab-btn px-4 py-1.5 rounded-lg text-sm font-semibold border border-gray-200 text-gray-500">Past</button>
+          </div>
+          <button
+            class="open-modal bg-[#05285E] text-yellow-300 font-bold px-5 py-2 rounded-xl text-sm hover:bg-[#18396F] transition-colors"
+            data-modal="modal-event">+ New Event</button>
+        </div>
+        <div class="bg-white rounded-2xl shadow-sm overflow-hidden">
+          <table class="w-full text-sm">
+            <thead class="bg-slate-50 border-b border-gray-100">
+              <tr>
+                <th class="text-left px-6 py-3.5 text-xs font-black text-gray-400 uppercase tracking-wider">Event</th>
+                <th class="text-left px-4 py-3.5 text-xs font-black text-gray-400 uppercase tracking-wider">Date</th>
+                <th class="text-left px-4 py-3.5 text-xs font-black text-gray-400 uppercase tracking-wider">Venue</th>
+                <th class="text-left px-4 py-3.5 text-xs font-black text-gray-400 uppercase tracking-wider">Type</th>
+                <th class="text-left px-4 py-3.5 text-xs font-black text-gray-400 uppercase tracking-wider">Status</th>
+                <th class="px-4 py-3.5"></th>
+              </tr>
+            </thead>
+            <tbody id="events-tbody" class="divide-y divide-gray-50"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ── PROGRAMS ── -->
+      <div id="panel-programs" class="panel">
+        <div class="bg-white rounded-2xl shadow-sm mb-5 px-6 py-4 flex justify-between items-center">
+          <div class="flex gap-2">
+            <button class="tab-btn active px-4 py-1.5 rounded-lg text-sm font-semibold border border-gray-200">All
+              Programs</button>
+            <button
+              class="tab-btn px-4 py-1.5 rounded-lg text-sm font-semibold border border-gray-200 text-gray-500">Undergraduate</button>
+            <button
+              class="tab-btn px-4 py-1.5 rounded-lg text-sm font-semibold border border-gray-200 text-gray-500">Graduate</button>
+          </div>
+          <button
+            class="open-modal bg-[#05285E] text-yellow-300 font-bold px-5 py-2 rounded-xl text-sm hover:bg-[#18396F] transition-colors"
+            data-modal="modal-program">+ New Program</button>
+        </div>
+        <div id="programs-grid" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+      </div>
+
+      <!-- ── GALLERY ── -->
+      <div id="panel-gallery" class="panel">
+        <div class="bg-white rounded-2xl shadow-sm mb-5 px-6 py-4 flex justify-between items-center flex-wrap gap-3">
+          <div class="flex gap-2">
+            <button class="tab-btn active px-4 py-1.5 rounded-lg text-sm font-semibold border border-gray-200">All
+              Albums</button>
+            <button
+              class="tab-btn px-4 py-1.5 rounded-lg text-sm font-semibold border border-gray-200 text-gray-500">Events</button>
+            <button
+              class="tab-btn px-4 py-1.5 rounded-lg text-sm font-semibold border border-gray-200 text-gray-500">Campus</button>
+          </div>
+          <button
+            class="open-modal bg-[#05285E] text-yellow-300 font-bold px-5 py-2 rounded-xl text-sm hover:bg-[#18396F] transition-colors"
+            data-modal="modal-album">+ New Album</button>
+        </div>
+        <div id="gallery-grid" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5"></div>
+      </div>
+
+      <!-- ── ENROLLMENT ── -->
+      <div id="panel-enrollment" class="panel">
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+          <div class="bg-white rounded-2xl p-5 shadow-sm border-t-4 border-[#05285E]">
+            <div class="text-2xl mb-2">📝</div>
+            <div class="font-display font-black text-2xl text-[#05285E]">347</div>
+            <div class="text-gray-400 text-xs font-semibold uppercase tracking-wider">Enrolled</div>
+          </div>
+          <div class="bg-white rounded-2xl p-5 shadow-sm border-t-4 border-yellow-300">
+            <div class="text-2xl mb-2">⏳</div>
+            <div class="font-display font-black text-2xl text-[#05285E]">23</div>
+            <div class="text-gray-400 text-xs font-semibold uppercase tracking-wider">Pending</div>
+          </div>
+          <div class="bg-white rounded-2xl p-5 shadow-sm border-t-4 border-green-400">
+            <div class="text-2xl mb-2">✅</div>
+            <div class="font-display font-black text-2xl text-[#05285E]">312</div>
+            <div class="text-gray-400 text-xs font-semibold uppercase tracking-wider">Confirmed</div>
+          </div>
+          <div class="bg-white rounded-2xl p-5 shadow-sm border-t-4 border-red-400">
+            <div class="text-2xl mb-2">❌</div>
+            <div class="font-display font-black text-2xl text-[#05285E]">12</div>
+            <div class="text-gray-400 text-xs font-semibold uppercase tracking-wider">Rejected</div>
+          </div>
+        </div>
+        <div class="bg-white rounded-2xl shadow-sm mb-5 px-6 py-4 flex flex-wrap gap-3 justify-between items-center">
+          <div class="flex gap-2">
+            <button class="tab-btn active px-4 py-1.5 rounded-lg text-sm font-semibold border border-gray-200">All
+              Students</button>
+            <button
+              class="tab-btn px-4 py-1.5 rounded-lg text-sm font-semibold border border-gray-200 text-gray-500">Pending</button>
+            <button
+              class="tab-btn px-4 py-1.5 rounded-lg text-sm font-semibold border border-gray-200 text-gray-500">Confirmed</button>
+          </div>
+          <button
+            class="open-modal bg-[#05285E] text-yellow-300 font-bold px-5 py-2 rounded-xl text-sm hover:bg-[#18396F] transition-colors"
+            data-modal="modal-student">+ Add Student</button>
+        </div>
+        <div class="bg-white rounded-2xl shadow-sm overflow-hidden">
+          <table class="w-full text-sm">
+            <thead class="bg-slate-50 border-b border-gray-100">
+              <tr>
+                <th class="text-left px-6 py-3.5 text-xs font-black text-gray-400 uppercase tracking-wider">Student</th>
+                <th class="text-left px-4 py-3.5 text-xs font-black text-gray-400 uppercase tracking-wider">ID</th>
+                <th class="text-left px-4 py-3.5 text-xs font-black text-gray-400 uppercase tracking-wider">Program</th>
+                <th class="text-left px-4 py-3.5 text-xs font-black text-gray-400 uppercase tracking-wider">Year</th>
+                <th class="text-left px-4 py-3.5 text-xs font-black text-gray-400 uppercase tracking-wider">Status</th>
+                <th class="px-4 py-3.5"></th>
+              </tr>
+            </thead>
+            <tbody id="students-tbody" class="divide-y divide-gray-50"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ── FACULTY ── -->
+      <div id="panel-faculty" class="panel">
+        <div class="bg-white rounded-2xl shadow-sm mb-5 px-6 py-4 flex justify-between items-center flex-wrap gap-3">
+          <div class="flex gap-2">
+            <button class="tab-btn active px-4 py-1.5 rounded-lg text-sm font-semibold border border-gray-200">All
+              Staff</button>
+            <button
+              class="tab-btn px-4 py-1.5 rounded-lg text-sm font-semibold border border-gray-200 text-gray-500">Faculty</button>
+            <button
+              class="tab-btn px-4 py-1.5 rounded-lg text-sm font-semibold border border-gray-200 text-gray-500">Admin</button>
+          </div>
+          <button
+            class="open-modal bg-[#05285E] text-yellow-300 font-bold px-5 py-2 rounded-xl text-sm hover:bg-[#18396F] transition-colors"
+            data-modal="modal-faculty">+ Add Member</button>
+        </div>
+        <div id="faculty-grid" class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4"></div>
+      </div>
+
+      <!-- ── SETTINGS ── -->
+      <div id="panel-settings" class="panel">
+        <div class="grid lg:grid-cols-3 gap-6">
+          <div class="lg:col-span-2 space-y-6">
+            <div class="bg-white rounded-2xl shadow-sm overflow-hidden">
+              <div class="px-6 py-4 border-b border-gray-100 font-bold text-[#05285E]">🏫 General Settings</div>
+              <div class="p-6 space-y-4">
+                <div class="grid grid-cols-2 gap-4">
+                  <div><label class="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-1.5">School
+                      Name</label><input type="text" value="Kabankalan Catholic College Inc."
+                      class="w-full border-2 border-gray-200 rounded-xl px-4 py-2.5 text-sm" /></div>
+                  <div><label
+                      class="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-1.5">Abbreviation</label><input
+                      type="text" value="KCC" class="w-full border-2 border-gray-200 rounded-xl px-4 py-2.5 text-sm" />
+                  </div>
+                </div>
+                <div><label
+                    class="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-1.5">Motto</label><input
+                    type="text" value="Fides et Scientia"
+                    class="w-full border-2 border-gray-200 rounded-xl px-4 py-2.5 text-sm" /></div>
+                <div><label
+                    class="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-1.5">Address</label><input
+                    type="text" value="Kabankalan City, Negros Occidental, Philippines 6111"
+                    class="w-full border-2 border-gray-200 rounded-xl px-4 py-2.5 text-sm" /></div>
+                <div class="grid grid-cols-2 gap-4">
+                  <div><label
+                      class="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-1.5">Phone</label><input
+                      type="text" value="(034) 471-2345"
+                      class="w-full border-2 border-gray-200 rounded-xl px-4 py-2.5 text-sm" /></div>
+                  <div><label
+                      class="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-1.5">Email</label><input
+                      type="text" value="info@kcc.edu.ph"
+                      class="w-full border-2 border-gray-200 rounded-xl px-4 py-2.5 text-sm" /></div>
+                </div>
+                <button
+                  class="show-toast bg-[#05285E] text-yellow-300 font-bold px-6 py-2.5 rounded-xl text-sm hover:bg-[#18396F] transition-colors"
+                  data-msg="Settings saved!">Save Changes</button>
+              </div>
+            </div>
+            <div class="bg-white rounded-2xl shadow-sm overflow-hidden">
+              <div class="px-6 py-4 border-b border-gray-100 flex justify-between items-center">
+                <span class="font-bold text-[#05285E]">📢 Announcements Ticker</span>
+                <button
+                  class="add-ticker text-xs bg-yellow-300 text-[#05285E] font-bold px-3 py-1.5 rounded-lg hover:bg-yellow-200 transition-colors">+
+                  Add</button>
+              </div>
+              <div class="p-6 space-y-2" id="ticker-list">
+                <div class="flex gap-2 items-center bg-slate-50 rounded-xl px-4 py-2.5"><span
+                    class="text-xs text-gray-700 flex-1">Enrollment for A.Y. 2025–2026 is now OPEN</span><button
+                    class="del-ticker text-red-400 hover:text-red-600 text-xs font-bold ml-2">✕</button></div>
+                <div class="flex gap-2 items-center bg-slate-50 rounded-xl px-4 py-2.5"><span
+                    class="text-xs text-gray-700 flex-1">Final Examinations: March 10–14, 2025</span><button
+                    class="del-ticker text-red-400 hover:text-red-600 text-xs font-bold ml-2">✕</button></div>
+                <div class="flex gap-2 items-center bg-slate-50 rounded-xl px-4 py-2.5"><span
+                    class="text-xs text-gray-700 flex-1">KCC Foundation Day — April 5, 2025</span><button
+                    class="del-ticker text-red-400 hover:text-red-600 text-xs font-bold ml-2">✕</button></div>
+              </div>
+            </div>
+          </div>
+          <div class="space-y-6">
+            <div class="bg-white rounded-2xl shadow-sm overflow-hidden">
+              <div class="px-6 py-4 border-b border-gray-100 font-bold text-[#05285E]">👤 Admin Account</div>
+              <div class="p-6 space-y-4">
+                <div class="flex items-center gap-4 mb-2">
+                  <div
+                    class="w-14 h-14 rounded-full bg-[#05285E] flex items-center justify-center text-yellow-300 font-black text-2xl">
+                    A</div>
+                  <div>
+                    <div class="font-bold text-[#05285E]">Administrator</div>
+                    <div class="text-gray-400 text-xs">admin @ kcc.edu.ph</div>
+                  </div>
+                </div>
+                <div><label class="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-1.5">New
+                    Password</label><input type="password" placeholder="Leave blank to keep current"
+                    class="w-full border-2 border-gray-200 rounded-xl px-4 py-2.5 text-sm" /></div>
+                <button
+                  class="show-toast w-full bg-[#05285E] text-yellow-300 font-bold py-2.5 rounded-xl text-sm hover:bg-[#18396F] transition-colors"
+                  data-msg="Account updated!">Update Account</button>
+              </div>
+            </div>
+            <div class="bg-white rounded-2xl shadow-sm overflow-hidden">
+              <div class="px-6 py-4 border-b border-gray-100 font-bold text-[#05285E]">🎛 Site Controls</div>
+              <div class="p-6 space-y-4">
+                <div class="flex justify-between items-center"><span class="text-sm text-gray-700">Enrollment
+                    Open</span><button
+                    class="toggle-sw on w-12 h-6 bg-green-500 rounded-full relative cursor-pointer border-0"><span
+                      class="absolute right-1 top-1 w-4 h-4 bg-white rounded-full transition-all pointer-events-none"></span></button>
+                </div>
+                <div class="flex justify-between items-center"><span class="text-sm text-gray-700">Ticker
+                    Visible</span><button
+                    class="toggle-sw on w-12 h-6 bg-green-500 rounded-full relative cursor-pointer border-0"><span
+                      class="absolute right-1 top-1 w-4 h-4 bg-white rounded-full transition-all pointer-events-none"></span></button>
+                </div>
+                <div class="flex justify-between items-center"><span class="text-sm text-gray-700">Maintenance
+                    Mode</span><button
+                    class="toggle-sw w-12 h-6 bg-gray-300 rounded-full relative cursor-pointer border-0"><span
+                      class="absolute left-1 top-1 w-4 h-4 bg-white rounded-full transition-all pointer-events-none"></span></button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- ════════════════════════════
+     MODALS
+════════════════════════════ -->
+
+  <!-- News Modal -->
+  <div id="modal-news" class="modal-bg fixed inset-0 z-50 bg-black/50 items-center justify-center p-4">
+    <div class="bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+      <div class="px-6 py-5 border-b flex justify-between items-center sticky top-0 bg-white rounded-t-2xl">
+        <h3 class="font-bold text-[#05285E] text-lg">Add News / Announcement</h3>
+        <button class="close-modal text-gray-400 hover:text-gray-600 text-xl" data-modal="modal-news">✕</button>
+      </div>
+      <div class="p-6 space-y-4">
+        <div><label class="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-1.5">Title *</label><input
+            id="news-title" type="text" placeholder="News title..."
+            class="w-full border-2 border-gray-200 rounded-xl px-4 py-3 text-sm" /></div>
+        <div class="grid grid-cols-2 gap-4">
+          <div><label
+              class="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-1.5">Category</label><select
+              id="news-cat" class="w-full border-2 border-gray-200 rounded-xl px-4 py-3 text-sm">
+              <option>Academic</option>
+              <option>Campus Life</option>
+              <option>Religious</option>
+              <option>Achievement</option>
+              <option>Announcement</option>
+            </select></div>
+          <div><label
+              class="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-1.5">Status</label><select
+              id="news-status" class="w-full border-2 border-gray-200 rounded-xl px-4 py-3 text-sm">
+              <option>Published</option>
+              <option>Draft</option>
+            </select></div>
+        </div>
+        <div><label class="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-1.5">Content
+            *</label><textarea id="news-content" rows="4" placeholder="Write content here..."
+            class="w-full border-2 border-gray-200 rounded-xl px-4 py-3 text-sm resize-none"></textarea></div>
+        <div class="flex justify-end gap-3 pt-2">
+          <button class="close-modal px-5 py-2.5 border border-gray-200 text-gray-500 rounded-xl text-sm font-semibold"
+            data-modal="modal-news">Cancel</button>
+          <button id="news-submit"
+            class="px-6 py-2.5 bg-[#05285E] text-yellow-300 font-bold rounded-xl text-sm hover:bg-[#18396F] transition-colors">Publish</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Event Modal -->
+  <div id="modal-event" class="modal-bg fixed inset-0 z-50 bg-black/50 items-center justify-center p-4">
+    <div class="bg-white rounded-2xl shadow-2xl w-full max-w-xl max-h-[90vh] overflow-y-auto">
+      <div class="px-6 py-5 border-b flex justify-between items-center sticky top-0 bg-white rounded-t-2xl">
+        <h3 class="font-bold text-[#05285E] text-lg">Add Event</h3>
+        <button class="close-modal text-gray-400 hover:text-gray-600 text-xl" data-modal="modal-event">✕</button>
+      </div>
+      <div class="p-6 space-y-4">
+        <div><label class="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-1.5">Event Name
+            *</label><input id="event-name" type="text" placeholder="e.g. Foundation Day Mass"
+            class="w-full border-2 border-gray-200 rounded-xl px-4 py-3 text-sm" /></div>
+        <div class="grid grid-cols-2 gap-4">
+          <div><label class="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-1.5">Date *</label><input
+              id="event-date" type="date" class="w-full border-2 border-gray-200 rounded-xl px-4 py-3 text-sm" /></div>
+          <div><label class="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-1.5">Type</label><select
+              id="event-type" class="w-full border-2 border-gray-200 rounded-xl px-4 py-3 text-sm">
+              <option>Academic</option>
+              <option>Religious</option>
+              <option>Campus Life</option>
+              <option>Sports</option>
+            </select></div>
+        </div>
+        <div><label class="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-1.5">Venue</label><input
+            id="event-venue" type="text" placeholder="e.g. KCC Chapel"
+            class="w-full border-2 border-gray-200 rounded-xl px-4 py-3 text-sm" /></div>
+        <div class="flex justify-end gap-3 pt-2">
+          <button class="close-modal px-5 py-2.5 border border-gray-200 text-gray-500 rounded-xl text-sm font-semibold"
+            data-modal="modal-event">Cancel</button>
+          <button id="event-submit"
+            class="px-6 py-2.5 bg-[#05285E] text-yellow-300 font-bold rounded-xl text-sm hover:bg-[#18396F] transition-colors">Add
+            Event</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Program Modal -->
+  <div id="modal-program" class="modal-bg fixed inset-0 z-50 bg-black/50 items-center justify-center p-4">
+    <div class="bg-white rounded-2xl shadow-2xl w-full max-w-xl max-h-[90vh] overflow-y-auto">
+      <div class="px-6 py-5 border-b flex justify-between items-center sticky top-0 bg-white rounded-t-2xl">
+        <h3 class="font-bold text-[#05285E] text-lg">Add Program</h3>
+        <button class="close-modal text-gray-400 hover:text-gray-600 text-xl" data-modal="modal-program">✕</button>
+      </div>
+      <div class="p-6 space-y-4">
+        <div><label class="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-1.5">Program Title
+            *</label><input id="prog-title" type="text" placeholder="e.g. BS Nursing"
+            class="w-full border-2 border-gray-200 rounded-xl px-4 py-3 text-sm" /></div>
+        <div class="grid grid-cols-2 gap-4">
+          <div><label
+              class="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-1.5">Department</label><input
+              id="prog-dept" type="text" placeholder="College name"
+              class="w-full border-2 border-gray-200 rounded-xl px-4 py-3 text-sm" /></div>
+          <div><label class="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-1.5">Level</label><select
+              id="prog-level" class="w-full border-2 border-gray-200 rounded-xl px-4 py-3 text-sm">
+              <option>Undergraduate</option>
+              <option>Graduate</option>
+              <option>Vocational</option>
+            </select></div>
+        </div>
+        <div><label
+            class="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-1.5">Description</label><textarea
+            id="prog-desc" rows="3"
+            class="w-full border-2 border-gray-200 rounded-xl px-4 py-3 text-sm resize-none"></textarea></div>
+        <div class="grid grid-cols-2 gap-4">
+          <div><label class="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-1.5">Years</label><input
+              id="prog-years" type="number" value="4"
+              class="w-full border-2 border-gray-200 rounded-xl px-4 py-3 text-sm" /></div>
+          <div><label
+              class="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-1.5">Students</label><input
+              id="prog-students" type="number" placeholder="0"
+              class="w-full border-2 border-gray-200 rounded-xl px-4 py-3 text-sm" /></div>
+        </div>
+        <div class="flex justify-end gap-3 pt-2">
+          <button class="close-modal px-5 py-2.5 border border-gray-200 text-gray-500 rounded-xl text-sm font-semibold"
+            data-modal="modal-program">Cancel</button>
+          <button id="prog-submit"
+            class="px-6 py-2.5 bg-[#05285E] text-yellow-300 font-bold rounded-xl text-sm hover:bg-[#18396F] transition-colors">Add
+            Program</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Student Modal -->
+  <div id="modal-student" class="modal-bg fixed inset-0 z-50 bg-black/50 items-center justify-center p-4">
+    <div class="bg-white rounded-2xl shadow-2xl w-full max-w-xl max-h-[90vh] overflow-y-auto">
+      <div class="px-6 py-5 border-b flex justify-between items-center sticky top-0 bg-white rounded-t-2xl">
+        <h3 class="font-bold text-[#05285E] text-lg">Add Student Record</h3>
+        <button class="close-modal text-gray-400 hover:text-gray-600 text-xl" data-modal="modal-student">✕</button>
+      </div>
+      <div class="p-6 space-y-4">
+        <div class="grid grid-cols-2 gap-4">
+          <div><label class="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-1.5">Last Name
+              *</label><input id="stu-last" type="text" placeholder="Santos"
+              class="w-full border-2 border-gray-200 rounded-xl px-4 py-3 text-sm" /></div>
+          <div><label class="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-1.5">First Name
+              *</label><input id="stu-first" type="text" placeholder="Maria"
+              class="w-full border-2 border-gray-200 rounded-xl px-4 py-3 text-sm" /></div>
+        </div>
+        <div class="grid grid-cols-2 gap-4">
+          <div><label class="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-1.5">Student
+              ID</label><input id="stu-id" type="text" placeholder="2025-00001"
+              class="w-full border-2 border-gray-200 rounded-xl px-4 py-3 text-sm" /></div>
+          <div><label class="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-1.5">Year
+              Level</label><select id="stu-year" class="w-full border-2 border-gray-200 rounded-xl px-4 py-3 text-sm">
+              <option>1st Year</option>
+              <option>2nd Year</option>
+              <option>3rd Year</option>
+              <option>4th Year</option>
+            </select></div>
+        </div>
+        <div><label class="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-1.5">Program</label><select
+            id="stu-prog" class="w-full border-2 border-gray-200 rounded-xl px-4 py-3 text-sm">
+            <option>BS Nursing</option>
+            <option>BS Accountancy</option>
+            <option>BS IT</option>
+            <option>BS Criminology</option>
+            <option>BEEd</option>
+            <option>MAEd</option>
+          </select></div>
+        <div class="flex justify-end gap-3 pt-2">
+          <button class="close-modal px-5 py-2.5 border border-gray-200 text-gray-500 rounded-xl text-sm font-semibold"
+            data-modal="modal-student">Cancel</button>
+          <button id="stu-submit"
+            class="px-6 py-2.5 bg-[#05285E] text-yellow-300 font-bold rounded-xl text-sm hover:bg-[#18396F] transition-colors">Add
+            Student</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Faculty Modal -->
+  <div id="modal-faculty" class="modal-bg fixed inset-0 z-50 bg-black/50 items-center justify-center p-4">
+    <div class="bg-white rounded-2xl shadow-2xl w-full max-w-xl max-h-[90vh] overflow-y-auto">
+      <div class="px-6 py-5 border-b flex justify-between items-center sticky top-0 bg-white rounded-t-2xl">
+        <h3 class="font-bold text-[#05285E] text-lg">Add Faculty / Staff</h3>
+        <button class="close-modal text-gray-400 hover:text-gray-600 text-xl" data-modal="modal-faculty">✕</button>
+      </div>
+      <div class="p-6 space-y-4">
+        <div class="grid grid-cols-2 gap-4">
+          <div><label class="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-1.5">Full Name
+              *</label><input id="fac-name" type="text" placeholder="Dr. Juan Dela Cruz"
+              class="w-full border-2 border-gray-200 rounded-xl px-4 py-3 text-sm" /></div>
+          <div><label
+              class="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-1.5">Position</label><input
+              id="fac-pos" type="text" placeholder="Dean / Professor"
+              class="w-full border-2 border-gray-200 rounded-xl px-4 py-3 text-sm" /></div>
+        </div>
+        <div class="grid grid-cols-2 gap-4">
+          <div><label
+              class="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-1.5">Department</label><input
+              id="fac-dept" type="text" placeholder="College name"
+              class="w-full border-2 border-gray-200 rounded-xl px-4 py-3 text-sm" /></div>
+          <div><label class="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-1.5">Type</label><select
+              id="fac-type" class="w-full border-2 border-gray-200 rounded-xl px-4 py-3 text-sm">
+              <option>Faculty</option>
+              <option>Admin Staff</option>
+              <option>Support Staff</option>
+            </select></div>
+        </div>
+        <div class="flex justify-end gap-3 pt-2">
+          <button class="close-modal px-5 py-2.5 border border-gray-200 text-gray-500 rounded-xl text-sm font-semibold"
+            data-modal="modal-faculty">Cancel</button>
+          <button id="fac-submit"
+            class="px-6 py-2.5 bg-[#05285E] text-yellow-300 font-bold rounded-xl text-sm hover:bg-[#18396F] transition-colors">Add
+            Member</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Album Modal -->
+  <div id="modal-album" class="modal-bg fixed inset-0 z-50 bg-black/50 items-center justify-center p-4">
+    <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md">
+      <div class="px-6 py-5 border-b flex justify-between items-center">
+        <h3 class="font-bold text-[#05285E] text-lg">New Album</h3>
+        <button class="close-modal text-gray-400 hover:text-gray-600 text-xl" data-modal="modal-album">✕</button>
+      </div>
+      <div class="p-6 space-y-4">
+        <div><label class="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-1.5">Album Name
+            *</label><input id="album-name" type="text" placeholder="Foundation Day 2025"
+            class="w-full border-2 border-gray-200 rounded-xl px-4 py-3 text-sm" /></div>
+        <div><label
+            class="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-1.5">Category</label><select
+            id="album-cat" class="w-full border-2 border-gray-200 rounded-xl px-4 py-3 text-sm">
+            <option>Events</option>
+            <option>Campus</option>
+            <option>Academic</option>
+            <option>Sports</option>
+          </select></div>
+        <div class="flex justify-end gap-3 pt-2">
+          <button class="close-modal px-5 py-2.5 border border-gray-200 text-gray-500 rounded-xl text-sm font-semibold"
+            data-modal="modal-album">Cancel</button>
+          <button id="album-submit"
+            class="px-6 py-2.5 bg-[#05285E] text-yellow-300 font-bold rounded-xl text-sm hover:bg-[#18396F] transition-colors">Create
+            Album</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div id="toast" class="fixed bottom-6 right-6 z-50 opacity-0 pointer-events-none">
+    <div
+      class="bg-[#05285E] text-yellow-300 font-semibold text-sm px-5 py-3 rounded-xl shadow-2xl flex items-center gap-2">
+      <span>✓</span><span id="toast-msg">Done</span>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════
+     JAVASCRIPT
+════════════════════════════ -->
+  <script>
+    (function () {
+      'use strict';
+
+      /* ──────────────────
+         DATA
+      ────────────────── */
+      var news = [
+        { id: 1, title: 'KCC Launches New Engineering Technology Program', cat: 'Academic', author: 'Comms Office', date: 'Feb 10, 2025', status: 'Published' },
+        { id: 2, title: 'KCC Students Win Regional Quiz Bee Championship', cat: 'Achievement', author: 'Sports Dept', date: 'Feb 18, 2025', status: 'Published' },
+        { id: 3, title: 'Library Expansion Project Completed', cat: 'Campus Life', author: 'Admin', date: 'Feb 15, 2025', status: 'Published' },
+        { id: 4, title: 'Annual Recollection Day for All Departments', cat: 'Religious', author: 'Chaplain', date: 'Feb 08, 2025', status: 'Published' },
+        { id: 5, title: 'KCC Signs MOU with Local Government for NSTP', cat: 'Announcement', author: 'Admin', date: 'Feb 02, 2025', status: 'Published' },
+        { id: 6, title: 'Upcoming Changes to Tuition Structure', cat: 'Announcement', author: 'Finance', date: 'Jan 28, 2025', status: 'Draft' },
+        { id: 7, title: 'New Scholarship Slots for Engineering Students', cat: 'Academic', author: 'Admin', date: 'Jan 20, 2025', status: 'Draft' },
+      ];
+
+      var events = [
+        { id: 1, name: 'Foundation Day Mass & Celebration', date: 'Feb 24, 2025', venue: 'KCC Chapel', type: 'Religious', status: 'Upcoming' },
+        { id: 2, name: '2nd Semester Final Examinations', date: 'Mar 10, 2025', venue: 'All Classrooms', type: 'Academic', status: 'Upcoming' },
+        { id: 3, name: 'Career Fair & Job Expo 2025', date: 'Mar 22, 2025', venue: 'Main Gymnasium', type: 'Campus Life', status: 'Upcoming' },
+        { id: 4, name: 'KCC Grand Foundation Day', date: 'Apr 05, 2025', venue: 'Entire Campus', type: 'Campus Life', status: 'Upcoming' },
+        { id: 5, name: 'Regional Quiz Bee', date: 'Feb 18, 2025', venue: 'DepEd Bacolod', type: 'Academic', status: 'Past' },
+      ];
+
+      var programs = [
+        { id: 1, title: 'BS Nursing', dept: 'College of Nursing', level: 'Undergraduate', years: 4, students: 840, desc: 'Compassionate, competent nurses for local and global healthcare.' },
+        { id: 2, title: 'BS Accountancy', dept: 'College of Business', level: 'Undergraduate', years: 5, students: 620, desc: 'Rigorous preparation for CPA licensure and finance careers.' },
+        { id: 3, title: 'BS Information Technology', dept: 'College of IT', level: 'Undergraduate', years: 4, students: 510, desc: 'Skills in software, networking, and cybersecurity.' },
+        { id: 4, title: 'Bachelor of Elementary Education', dept: 'College of Education', level: 'Undergraduate', years: 4, students: 730, desc: 'Forming future educators with strong pedagogical foundations.' },
+        { id: 5, title: 'BS Criminology', dept: 'College of Criminology', level: 'Undergraduate', years: 4, students: 460, desc: 'Training future law enforcers and justice system professionals.' },
+        { id: 6, title: 'Master of Arts in Education', dept: 'Graduate School', level: 'Graduate', years: 2, students: 120, desc: 'Advanced educational leadership and curriculum development.' },
+      ];
+
+      var students = [
+        { id: 1, name: 'Santos, Maria B.', sid: '2024-00123', program: 'BS Nursing', year: '1st Year', status: 'Confirmed' },
+        { id: 2, name: 'Reyes, Juan C.', sid: '2024-00124', program: 'BS Accountancy', year: '2nd Year', status: 'Confirmed' },
+        { id: 3, name: 'Garcia, Ana P.', sid: '2024-00125', program: 'BS IT', year: '3rd Year', status: 'Confirmed' },
+        { id: 4, name: 'Dela Cruz, Pedro S.', sid: '2025-00001', program: 'BS Criminology', year: '1st Year', status: 'Pending' },
+        { id: 5, name: 'Lopez, Rosa M.', sid: '2025-00002', program: 'BEEd', year: '1st Year', status: 'Pending' },
+        { id: 6, name: 'Flores, Carlo V.', sid: '2023-00098', program: 'MAEd', year: '2nd Year', status: 'Confirmed' },
+      ];
+
+      var faculty = [
+        { id: 1, name: 'Dr. Evelyn Cruz', pos: 'Dean', dept: 'College of Nursing', type: 'Faculty', init: 'EC' },
+        { id: 2, name: 'Prof. Ramon Santos', pos: 'Program Head', dept: 'College of IT', type: 'Faculty', init: 'RS' },
+        { id: 3, name: 'Dr. Maria Reyes', pos: 'Dean', dept: 'College of Business', type: 'Faculty', init: 'MR' },
+        { id: 4, name: 'Mr. Jose Flores', pos: 'Registrar', dept: 'Administration', type: 'Admin Staff', init: 'JF' },
+        { id: 5, name: 'Dr. Ana Garcia', pos: 'Research Director', dept: 'Graduate School', type: 'Faculty', init: 'AG' },
+        { id: 6, name: 'Prof. Luis Dela Cruz', pos: 'Dept Chair', dept: 'College of Education', type: 'Faculty', init: 'LD' },
+        { id: 7, name: 'Ms. Carla Ramos', pos: 'HR Officer', dept: 'Administration', type: 'Admin Staff', init: 'CR' },
+        { id: 8, name: 'Dr. Bong Villanueva', pos: 'Dean', dept: 'College of Criminology', type: 'Faculty', init: 'BV' },
+      ];
+
+      var albums = [
+        { id: 1, name: 'Foundation Day 2024', cat: 'Events', count: 48, emoji: '🎉' },
+        { id: 2, name: 'Graduation Ceremony 2024', cat: 'Events', count: 132, emoji: '🎓' },
+        { id: 3, name: 'Campus Tour', cat: 'Campus', count: 24, emoji: '🏛️' },
+        { id: 4, name: 'Sports Fest 2024', cat: 'Sports', count: 67, emoji: '🏆' },
+        { id: 5, name: 'Science Fair', cat: 'Academic', count: 31, emoji: '🔬' },
+        { id: 6, name: 'Chapel & Oratory', cat: 'Campus', count: 18, emoji: '⛪' },
+      ];
+
+      /* ──────────────────
+         HELPERS
+      ────────────────── */
+      function $(id) { return document.getElementById(id); }
+      function toast(msg) {
+        var t = $('toast'), m = $('toast-msg');
+        m.textContent = msg;
+        t.style.opacity = '1';
+        t.style.pointerEvents = 'auto';
+        setTimeout(function () { t.style.opacity = '0'; t.style.pointerEvents = 'none'; }, 2800);
+      }
+      function catBadge(c) {
+        var map = { Academic: 'bg-blue-100 text-blue-700', Achievement: 'bg-yellow-100 text-yellow-700', Religious: 'bg-green-100 text-green-700', 'Campus Life': 'bg-purple-100 text-purple-700', Announcement: 'bg-orange-100 text-orange-700' };
+        return map[c] || 'bg-gray-100 text-gray-500';
+      }
+
+      /* ──────────────────
+         NAVIGATION
+      ────────────────── */
+      var pageTitles = {
+        dashboard: 'Dashboard', preview: 'Website Preview', news: 'News & Announcements',
+        events: 'Events & Calendar', programs: 'Programs & Courses', gallery: 'Media & Gallery',
+        enrollment: 'Enrollment & Students', faculty: 'Faculty & Staff', settings: 'Settings'
+      };
+      var pageSubs = {
+        dashboard: 'Welcome back, Administrator', preview: 'View your live website',
+        news: 'Manage posts and announcements', events: 'Manage school events and calendar',
+        programs: 'Manage academic programs and courses', gallery: 'Manage photos and media albums',
+        enrollment: 'Manage student enrollment records', faculty: 'Manage faculty and staff directory',
+        settings: 'Configure site settings'
+      };
+      var addLabels = { news: '+ Add Post', events: '+ Add Event', programs: '+ Add Program', enrollment: '+ Add Student', faculty: '+ Add Member', gallery: '+ Upload' };
+      var addModals = { news: 'modal-news', events: 'modal-event', programs: 'modal-program', enrollment: 'modal-student', faculty: 'modal-faculty', gallery: null };
+
+      function showPanel(name) {
+        // panels
+        document.querySelectorAll('.panel').forEach(function (p) { p.classList.remove('active'); });
+        var panel = $('panel-' + name);
+        if (panel) panel.classList.add('active');
+        // sidebar
+        document.querySelectorAll('.nav-link').forEach(function (l) { l.classList.remove('active'); });
+        var link = document.querySelector('.nav-link[data-panel="' + name + '"]');
+        if (link) link.classList.add('active');
+        // header
+        $('page-title').textContent = pageTitles[name] || name;
+        $('page-sub').textContent = pageSubs[name] || '';
+        // add btn
+        var btn = $('add-btn');
+        if (addLabels[name]) {
+          btn.textContent = addLabels[name];
+          btn.style.display = '';
+          btn.onclick = addModals[name] ? function () { openModal(addModals[name]); } : null;
+        } else {
+          btn.style.display = 'none';
+        }
+      }
+
+      // Wire up all nav links via event delegation
+      document.querySelector('nav').addEventListener('click', function (e) {
+        var link = e.target.closest('.nav-link');
+        if (!link) return;
+        e.preventDefault();
+        showPanel(link.getAttribute('data-panel'));
+      });
+
+      // Default add-btn action
+      $('add-btn').addEventListener('click', function () {
+        // handled per-panel via showPanel
+      });
+
+      /* ──────────────────
+         MODALS
+      ────────────────── */
+      function openModal(id) { var m = $(id); if (m) { m.classList.add('open'); } }
+      function closeModal(id) { var m = $(id); if (m) { m.classList.remove('open'); } }
+
+      // Open via .open-modal buttons
+      document.addEventListener('click', function (e) {
+        var opener = e.target.closest('.open-modal');
+        if (opener) { openModal(opener.getAttribute('data-modal')); return; }
+        var closer = e.target.closest('.close-modal');
+        if (closer) { closeModal(closer.getAttribute('data-modal')); return; }
+        // Close on backdrop click
+        if (e.target.classList.contains('modal-bg')) { e.target.classList.remove('open'); }
+      });
+
+      /* ──────────────────
+         RENDER ALL
+      ────────────────── */
+      function renderAll() {
+        renderNews(); renderEvents(); renderPrograms(); renderStudents(); renderFaculty(); renderGallery();
+        showPanel('dashboard');
+      }
+
+      /* ──────────────────
+         NEWS
+      ────────────────── */
+      function renderNews() {
+        var tb = $('news-tbody');
+        tb.innerHTML = news.map(function (n) {
+          return (
+            '<tr class="tbl-row">' +
+            '<td class="px-6 py-4"><div class="font-semibold text-gray-800 text-sm">' + n.title + '</div></td>' +
+            '<td class="px-4 py-4"><span class="badge ' + catBadge(n.cat) + '">' + n.cat + '</span></td>' +
+            '<td class="px-4 py-4 text-gray-500 text-sm">' + n.author + '</td>' +
+            '<td class="px-4 py-4 text-gray-400 text-xs">' + n.date + '</td>' +
+            '<td class="px-4 py-4"><span class="badge ' + (n.status === 'Published' ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-500') + '">' + n.status + '</span></td>' +
+            '<td class="px-4 py-4 text-right"><button class="text-xs text-red-400 hover:underline font-semibold" onclick="delNews(' + n.id + ')">Delete</button></td>' +
+            '</tr>'
+          );
+        }).join('');
+      }
+      window.delNews = function (id) { if (confirm('Delete?')) { news = news.filter(function (n) { return n.id !== id; }); renderNews(); toast('Post deleted.'); } };
+      $('news-submit').addEventListener('click', function () {
+        var t = $('news-title').value.trim();
+        if (!t) { toast('Please enter a title.'); return; }
+        news.unshift({ id: Date.now(), title: t, cat: $('news-cat').value, author: 'Admin', date: new Date().toLocaleDateString('en-PH', { month: 'short', day: '2-digit', year: 'numeric' }), status: $('news-status').value });
+        renderNews(); closeModal('modal-news'); $('news-title').value = ''; toast('Post published!');
+      });
+
+      /* ──────────────────
+         EVENTS
+      ────────────────── */
+      function renderEvents() {
+        var tb = $('events-tbody');
+        tb.innerHTML = events.map(function (e) {
+          return (
+            '<tr class="tbl-row">' +
+            '<td class="px-6 py-4"><div class="font-semibold text-gray-800 text-sm">' + e.name + '</div></td>' +
+            '<td class="px-4 py-4 text-gray-500 text-sm">' + e.date + '</td>' +
+            '<td class="px-4 py-4 text-gray-400 text-sm">' + e.venue + '</td>' +
+            '<td class="px-4 py-4"><span class="badge ' + catBadge(e.type) + '">' + e.type + '</span></td>' +
+            '<td class="px-4 py-4"><span class="badge ' + (e.status === 'Upcoming' ? 'bg-blue-100 text-blue-700' : 'bg-gray-100 text-gray-400') + '">' + e.status + '</span></td>' +
+            '<td class="px-4 py-4 text-right"><button class="text-xs text-red-400 hover:underline font-semibold" onclick="delEvent(' + e.id + ')">Delete</button></td>' +
+            '</tr>'
+          );
+        }).join('');
+      }
+      window.delEvent = function (id) { if (confirm('Delete?')) { events = events.filter(function (e) { return e.id !== id; }); renderEvents(); toast('Event deleted.'); } };
+      $('event-submit').addEventListener('click', function () {
+        var n = $('event-name').value.trim();
+        if (!n) { toast('Enter an event name.'); return; }
+        events.unshift({ id: Date.now(), name: n, date: $('event-date').value || 'TBD', venue: $('event-venue').value || 'TBD', type: $('event-type').value, status: 'Upcoming' });
+        renderEvents(); closeModal('modal-event'); $('event-name').value = ''; toast('Event added!');
+      });
+
+      /* ──────────────────
+         PROGRAMS
+      ────────────────── */
+      var progColors = ['bg-[#05285E]', 'bg-[#18396F]', 'bg-indigo-800', 'bg-blue-800', 'bg-slate-700', 'bg-cyan-800'];
+      function renderPrograms() {
+        var g = $('programs-grid');
+        g.innerHTML = programs.map(function (p, i) {
+          return (
+            '<div class="bg-white rounded-2xl shadow-sm p-6 border-t-4 hover:-translate-y-1 transition-transform" style="border-top-color:#05285E">' +
+            '<div class="flex justify-between mb-2"><span class="badge ' + (p.level === 'Graduate' ? 'bg-purple-100 text-purple-700' : 'bg-blue-100 text-blue-700') + '">' + p.level + '</span>' +
+            '<button class="text-xs text-red-400 font-semibold" onclick="delProg(' + p.id + ')">✕</button></div>' +
+            '<div class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">' + p.dept + '</div>' +
+            '<h3 class="font-display font-bold text-[#05285E] text-base mb-2">' + p.title + '</h3>' +
+            '<p class="text-gray-400 text-xs leading-relaxed mb-4">' + p.desc + '</p>' +
+            '<div class="flex gap-4 pt-3 border-t border-gray-100">' +
+            '<div><div class="font-bold text-[#05285E] text-lg">' + p.years + '</div><div class="text-gray-400 text-xs">Years</div></div>' +
+            '<div><div class="font-bold text-[#05285E] text-lg">' + p.students + '</div><div class="text-gray-400 text-xs">Students</div></div>' +
+            '</div></div>'
+          );
+        }).join('');
+      }
+      window.delProg = function (id) { if (confirm('Remove?')) { programs = programs.filter(function (p) { return p.id !== id; }); renderPrograms(); toast('Program removed.'); } };
+      $('prog-submit').addEventListener('click', function () {
+        var t = $('prog-title').value.trim();
+        if (!t) { toast('Enter a title.'); return; }
+        programs.push({ id: Date.now(), title: t, dept: $('prog-dept').value || 'TBD', level: $('prog-level').value, years: parseInt($('prog-years').value) || 4, students: parseInt($('prog-students').value) || 0, desc: $('prog-desc').value || 'No description.' });
+        renderPrograms(); closeModal('modal-program'); $('prog-title').value = ''; toast('Program added!');
+      });
+
+      /* ──────────────────
+         STUDENTS
+      ────────────────── */
+      function renderStudents() {
+        var tb = $('students-tbody');
+        tb.innerHTML = students.map(function (s) {
+          return (
+            '<tr class="tbl-row">' +
+            '<td class="px-6 py-4"><div class="flex items-center gap-3">' +
+            '<div class="w-8 h-8 rounded-full bg-[#05285E] flex items-center justify-center text-yellow-300 text-xs font-black">' + s.name.charAt(0) + '</div>' +
+            '<div class="font-semibold text-gray-800 text-sm">' + s.name + '</div></div></td>' +
+            '<td class="px-4 py-4 text-gray-500 text-sm font-mono">' + s.sid + '</td>' +
+            '<td class="px-4 py-4 text-gray-500 text-sm">' + s.program + '</td>' +
+            '<td class="px-4 py-4 text-gray-400 text-sm">' + s.year + '</td>' +
+            '<td class="px-4 py-4"><span class="badge ' + (s.status === 'Confirmed' ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700') + '">' + s.status + '</span></td>' +
+            '<td class="px-4 py-4 text-right"><button class="text-xs text-red-400 hover:underline font-semibold" onclick="delStu(' + s.id + ')">Remove</button></td>' +
+            '</tr>'
+          );
+        }).join('');
+      }
+      window.delStu = function (id) { if (confirm('Remove?')) { students = students.filter(function (s) { return s.id !== id; }); renderStudents(); toast('Record removed.'); } };
+      $('stu-submit').addEventListener('click', function () {
+        var f = $('stu-first').value.trim(), l = $('stu-last').value.trim();
+        if (!f || !l) { toast('Enter first and last name.'); return; }
+        students.push({ id: Date.now(), name: l + ', ' + f, sid: $('stu-id').value || '2025-XXXX', program: $('stu-prog').value, year: $('stu-year').value, status: 'Pending' });
+        renderStudents(); closeModal('modal-student'); $('stu-first').value = ''; $('stu-last').value = ''; toast('Student added!');
+      });
+
+      /* ──────────────────
+         FACULTY
+      ────────────────── */
+      var facColors = ['bg-blue-500', 'bg-purple-500', 'bg-green-600', 'bg-red-500', 'bg-yellow-500', 'bg-pink-500', 'bg-indigo-500', 'bg-teal-500'];
+      function renderFaculty() {
+        var g = $('faculty-grid');
+        g.innerHTML = faculty.map(function (f, i) {
+          return (
+            '<div class="bg-white rounded-2xl shadow-sm p-6 text-center hover:-translate-y-1 transition-transform">' +
+            '<div class="w-16 h-16 rounded-full ' + facColors[i % facColors.length] + ' flex items-center justify-center text-white font-black text-xl mx-auto mb-3">' + f.init + '</div>' +
+            '<h4 class="font-bold text-[#05285E] text-sm">' + f.name + '</h4>' +
+            '<p class="text-gray-400 text-xs mt-0.5">' + f.pos + '</p>' +
+            '<p class="text-gray-300 text-xs">' + f.dept + '</p>' +
+            '<span class="badge mt-2 ' + (f.type === 'Faculty' ? 'bg-blue-100 text-blue-700' : 'bg-orange-100 text-orange-700') + '">' + f.type + '</span>' +
+            '<div class="mt-3"><button class="text-xs text-red-400 hover:underline font-semibold" onclick="delFac(' + f.id + ')">Remove</button></div>' +
+            '</div>'
+          );
+        }).join('');
+      }
+      window.delFac = function (id) { if (confirm('Remove?')) { faculty = faculty.filter(function (f) { return f.id !== id; }); renderFaculty(); toast('Member removed.'); } };
+      $('fac-submit').addEventListener('click', function () {
+        var n = $('fac-name').value.trim();
+        if (!n) { toast('Enter a name.'); return; }
+        var init = n.split(' ').map(function (w) { return w[0] || ''; }).join('').toUpperCase().slice(0, 2);
+        faculty.push({ id: Date.now(), name: n, pos: $('fac-pos').value || 'Staff', dept: $('fac-dept').value || 'Admin', type: $('fac-type').value, init: init });
+        renderFaculty(); closeModal('modal-faculty'); $('fac-name').value = ''; toast('Member added!');
+      });
+
+      /* ──────────────────
+         GALLERY
+      ────────────────── */
+      var albumBgs = ['bg-[#05285E]', 'bg-[#18396F]', 'bg-indigo-800', 'bg-blue-800', 'bg-cyan-800', 'bg-slate-700'];
+      function renderGallery() {
+        var g = $('gallery-grid');
+        g.innerHTML = albums.map(function (a, i) {
+          return (
+            '<div class="bg-white rounded-2xl shadow-sm overflow-hidden hover:-translate-y-1 transition-transform">' +
+            '<div class="' + albumBgs[i % albumBgs.length] + ' flex items-center justify-center h-36 text-5xl">' + a.emoji + '</div>' +
+            '<div class="p-4">' +
+            '<div class="flex justify-between items-start">' +
+            '<div><h4 class="font-bold text-[#05285E] text-sm">' + a.name + '</h4><p class="text-gray-400 text-xs mt-0.5">' + a.count + ' photos · ' + a.cat + '</p></div>' +
+            '<button class="text-xs text-red-400 font-semibold" onclick="delAlbum(' + a.id + ')">✕</button>' +
+            '</div>' +
+            '<button class="mt-3 w-full text-xs border border-[#05285E]/20 text-[#05285E] rounded-lg py-1.5 hover:bg-[#05285E] hover:text-yellow-300 transition-colors font-semibold">View Photos</button>' +
+            '</div></div>'
+          );
+        }).join('');
+      }
+      window.delAlbum = function (id) { if (confirm('Delete?')) { albums = albums.filter(function (a) { return a.id !== id; }); renderGallery(); toast('Album deleted.'); } };
+      $('album-submit').addEventListener('click', function () {
+        var n = $('album-name').value.trim();
+        if (!n) { toast('Enter album name.'); return; }
+        var emojis = ['📷', '🌟', '🎊', '📸', '🏅'];
+        albums.push({ id: Date.now(), name: n, cat: $('album-cat').value, count: 0, emoji: emojis[albums.length % emojis.length] });
+        renderGallery(); closeModal('modal-album'); $('album-name').value = ''; toast('Album created!');
+      });
+
+      /* ──────────────────
+         SETTINGS
+      ────────────────── */
+      // Toast buttons
+      document.querySelectorAll('.show-toast').forEach(function (btn) {
+        btn.addEventListener('click', function () { toast(this.getAttribute('data-msg') || 'Saved!'); });
+      });
+
+      // Toggle switches
+      document.querySelectorAll('.toggle-sw').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          var isOn = this.classList.contains('on');
+          this.classList.toggle('on', !isOn);
+          this.classList.toggle('bg-green-500', !isOn);
+          this.classList.toggle('bg-gray-300', isOn);
+          var knob = this.querySelector('span');
+          if (knob) {
+            knob.classList.toggle('right-1', !isOn);
+            knob.classList.toggle('left-1', isOn);
+          }
+          toast(isOn ? 'Feature disabled.' : 'Feature enabled.');
+        });
+      });
+
+      // Ticker delete
+      document.getElementById('ticker-list').addEventListener('click', function (e) {
+        if (e.target.classList.contains('del-ticker')) { e.target.closest('div').remove(); }
+      });
+      // Ticker add
+      document.querySelector('.add-ticker').addEventListener('click', function () {
+        var txt = prompt('Announcement text:');
+        if (!txt) return;
+        var d = document.createElement('div');
+        d.className = 'flex gap-2 items-center bg-slate-50 rounded-xl px-4 py-2.5';
+        d.innerHTML = '<span class="text-xs text-gray-700 flex-1">' + txt + '</span><button class="del-ticker text-red-400 hover:text-red-600 text-xs font-bold ml-2">✕</button>';
+        document.getElementById('ticker-list').appendChild(d);
+        toast('Announcement added!');
+      });
+
+    })(); // end IIFE
+  </script>
+</body>
+
+</html>

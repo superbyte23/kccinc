@@ -1,0 +1,1341 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kabankalan Catholic College Inc. | KCC</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;600;700;800;900&family=Source+Sans+3:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet" />
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#05285E',
+            secondary: '#18396F',
+            accent1: '#FAE9A1',
+            accent2: '#FEE773',
+          },
+          fontFamily: {
+            main: ['"Nunito Sans"', 'sans-serif'],
+            sans: ['"Source Sans 3"', 'sans-serif'],
+          },
+          keyframes: {
+            ticker: { '0%': { transform: 'translateX(0)' }, '100%': { transform: 'translateX(-50%)' } },
+            fadeUp: { '0%': { opacity: '0', transform: 'translateY(24px)' }, '100%': { opacity: '1', transform: 'translateY(0)' } },
+            float: { '0%,100%': { transform: 'translateY(0)' }, '50%': { transform: 'translateY(-8px)' } },
+            slideDown: { '0%': { opacity: '0', transform: 'translateY(-8px)' }, '100%': { opacity: '1', transform: 'translateY(0)' } },
+          },
+          animation: {
+            ticker: 'ticker 30s linear infinite',
+            fadeUp: 'fadeUp 0.7s ease both',
+            fadeUpD: 'fadeUp 0.7s 0.18s ease both',
+            float: 'float 4s ease-in-out infinite',
+            slideDown: 'slideDown 0.22s ease both',
+          },
+        },
+      },
+    };
+  </script>
+  <style>
+    body {
+      font-family: 'Source Sans 3', sans-serif;
+    }
+
+    .font-main {
+      font-family: 'Nunito Sans', sans-serif;
+    }
+
+    /* Desktop dropdown — JS controlled */
+    .dropdown {
+      display: none;
+      flex-direction: column;
+    }
+
+    .dropdown.open {
+      display: flex;
+      animation: slideDown 0.18s ease both;
+    }
+
+    /* Invisible bridge: fills the gap between the trigger and the dropdown panel
+     so the mouse doesn't "leave" the nav-item while travelling downward */
+    .nav-item .dropdown::before {
+      content: '';
+      position: absolute;
+      top: -8px;
+      left: 0;
+      right: 0;
+      height: 8px;
+    }
+
+    /* Mobile accordion */
+    .mob-sub {
+      display: none;
+    }
+
+    .mob-sub.open {
+      display: block;
+      animation: slideDown 0.22s ease both;
+    }
+
+    /* Ticker */
+    .ticker-track:hover {
+      animation-play-state: paused;
+    }
+
+    /* Hero diagonal (desktop only) */
+    @media (min-width: 1024px) {
+      .hero-panel-right {
+        clip-path: polygon(6% 0, 100% 0, 100% 100%, 0 100%);
+      }
+    }
+
+    /* Patterns */
+    .bg-hatch {
+      background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23FAE9A1' fill-opacity='0.04' fill-rule='evenodd'%3E%3Cpath d='M0 40L40 0H20L0 20M40 40V20L20 40'/%3E%3C/g%3E%3C/svg%3E");
+    }
+
+    .bg-dot {
+      background-image: radial-gradient(circle, rgba(254, 231, 115, 0.08) 1px, transparent 1px);
+      background-size: 22px 22px;
+    }
+
+    /* Gallery hover */
+    .gallery-item .gallery-overlay {
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .gallery-item:hover .gallery-overlay {
+      opacity: 1;
+    }
+
+    .gallery-item .gallery-img {
+      transition: transform 0.4s;
+    }
+
+    .gallery-item:hover .gallery-img {
+      transform: scale(1.06);
+    }
+
+    /* News card */
+    .news-card {
+      transition: transform 0.2s;
+    }
+
+    .news-card:hover {
+      transform: translateX(4px);
+    }
+
+    /* Program card accent bar */
+    .prog-card {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .prog-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: #FEE773;
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.3s;
+    }
+
+    .prog-card:hover::before {
+      transform: scaleX(1);
+    }
+
+    /* Hover helpers */
+    .quick-card {
+      transition: all 0.22s;
+    }
+
+    .quick-card:hover {
+      transform: translateY(-4px);
+      border-color: #FEE773;
+      box-shadow: 0 10px 28px rgba(5, 40, 94, 0.13);
+    }
+
+    .value-pill {
+      transition: all 0.18s;
+    }
+
+    .value-pill:hover {
+      background: #05285E !important;
+      color: #FEE773 !important;
+    }
+
+    /* Scroll reveal */
+    .reveal {
+      opacity: 0;
+      transform: translateY(18px);
+      transition: opacity 0.55s, transform 0.55s;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Back to top */
+    #back-top {
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s;
+    }
+
+    #back-top.show {
+      opacity: 1;
+      pointer-events: auto;
+    }
+  </style>
+</head>
+
+<body class="bg-white text-gray-900 overflow-x-hidden">
+
+  <!-- ══════════════════════════════════════════════
+     TOP BAR (hidden on mobile)
+══════════════════════════════════════════════ -->
+  <div class="bg-primary border-b-2 border-accent2 text-accent1 text-xs tracking-wide hidden sm:block">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-1.5 flex flex-wrap justify-between items-center gap-2">
+      <span>📍 Kabankalan City, Negros Occidental, Philippines</span>
+      <span class="flex flex-wrap items-center gap-2 sm:gap-3">
+        <a href="tel:+63344712345" class="hover:text-accent2 transition-colors">📞 (034) 471-2345</a>
+        <span class="opacity-30">|</span>
+        <a href="mailto:info@kcc.edu.ph" class="hover:text-accent2 transition-colors">✉ info@kcc.edu.ph</a>
+        <span class="opacity-30">|</span>
+        <a href="/login.html" class="hover:text-accent2 transition-colors">Student Portal</a>
+        <span class="opacity-30">|</span>
+        <a href="/login.html" class="hover:text-accent2 transition-colors">Faculty Login</a>
+      </span>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════
+     HEADER / NAV
+══════════════════════════════════════════════ -->
+  <header class="bg-white sticky top-0 z-50 shadow-md shadow-primary/10">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 flex items-center gap-3 h-16 sm:h-20">
+
+      <!-- Logo -->
+      <a href="#" class="flex items-center gap-2 sm:gap-3 flex-shrink-0">
+        <img src="./assets/img/logo.png" alt="Logo" class="w-10 h-10 sm:w-14 sm:h-14 object-contain" />
+        <div>
+          <div class="font-main font-bold text-primary leading-tight text-sm sm:text-base">
+            <span class="hidden uppercase sm:inline">Kabankalan Catholic College Inc.</span>
+            <span class="inline sm:hidden">KCC INC.</span>
+          </div>
+          <div class="text-gray-400 text-xs tracking-widest uppercase hidden sm:block">Catholic Education, Our Identity,
+            Our Mission</div>
+        </div>
+      </a>
+
+      <!-- Desktop Nav -->
+      <nav class="ml-auto hidden lg:block">
+        <ul class="flex items-center gap-1 list-none m-0 p-0">
+          <li><a href="#"
+              class="block px-3 py-2 text-sm font-semibold text-primary rounded-lg bg-primary/10 hover:bg-primary hover:text-accent1 transition-all">Home</a>
+          </li>
+          <li class="relative" data-drop>
+            <button onclick="toggleDrop(this)"
+              class="flex items-center gap-1 px-3 py-2 text-sm font-semibold text-primary rounded-lg hover:bg-primary hover:text-accent1 transition-all">About
+              <span class="text-xs opacity-50 drop-arrow">▾</span></button>
+            <ul
+              class="dropdown absolute top-full left-0 mt-2 bg-white border border-primary/10 rounded-xl shadow-xl min-w-48 overflow-hidden z-50 list-none p-1">
+              <li><a href="#" class="block px-4 py-2.5 text-sm text-primary hover:bg-primary/5 rounded-lg">History &amp;
+                  Background</a></li>
+              <li><a href="#" class="block px-4 py-2.5 text-sm text-primary hover:bg-primary/5 rounded-lg">Vision,
+                  Mission &amp; Goals</a></li>
+              <li><a href="#"
+                  class="block px-4 py-2.5 text-sm text-primary hover:bg-primary/5 rounded-lg">Administration</a></li>
+              <li><a href="#"
+                  class="block px-4 py-2.5 text-sm text-primary hover:bg-primary/5 rounded-lg">Accreditations</a></li>
+            </ul>
+          </li>
+          <li class="relative" data-drop>
+            <button onclick="toggleDrop(this)"
+              class="flex items-center gap-1 px-3 py-2 text-sm font-semibold text-primary rounded-lg hover:bg-primary hover:text-accent1 transition-all">Academics
+              <span class="text-xs opacity-50 drop-arrow">▾</span></button>
+            <ul
+              class="dropdown absolute top-full left-0 mt-2 bg-white border border-primary/10 rounded-xl shadow-xl min-w-48 overflow-hidden z-50 list-none p-1">
+              <li><a href="#" class="block px-4 py-2.5 text-sm text-primary hover:bg-primary/5 rounded-lg">Programs
+                  Offered</a></li>
+              <li><a href="#" class="block px-4 py-2.5 text-sm text-primary hover:bg-primary/5 rounded-lg">Academic
+                  Calendar</a></li>
+              <li><a href="#" class="block px-4 py-2.5 text-sm text-primary hover:bg-primary/5 rounded-lg">Curriculum
+                  &amp; Syllabi</a></li>
+              <li><a href="#" class="block px-4 py-2.5 text-sm text-primary hover:bg-primary/5 rounded-lg">Research
+                  &amp; Publications</a></li>
+            </ul>
+          </li>
+          <li class="relative" data-drop>
+            <button onclick="toggleDrop(this)"
+              class="flex items-center gap-1 px-3 py-2 text-sm font-semibold text-primary rounded-lg hover:bg-primary hover:text-accent1 transition-all">Admissions
+              <span class="text-xs opacity-50 drop-arrow">▾</span></button>
+            <ul
+              class="dropdown absolute top-full left-0 mt-2 bg-white border border-primary/10 rounded-xl shadow-xl min-w-48 overflow-hidden z-50 list-none p-1">
+              <li><a href="#" class="block px-4 py-2.5 text-sm text-primary hover:bg-primary/5 rounded-lg">How to
+                  Apply</a></li>
+              <li><a href="#"
+                  class="block px-4 py-2.5 text-sm text-primary hover:bg-primary/5 rounded-lg">Requirements</a></li>
+              <li><a href="#" class="block px-4 py-2.5 text-sm text-primary hover:bg-primary/5 rounded-lg">Scholarships
+                  &amp; Grants</a></li>
+              <li><a href="#" class="block px-4 py-2.5 text-sm text-primary hover:bg-primary/5 rounded-lg">Tuition &amp;
+                  Fees</a></li>
+            </ul>
+          </li>
+          <li><a href="#"
+              class="block px-3 py-2 text-sm font-semibold text-primary rounded-lg hover:bg-primary hover:text-accent1 transition-all">Campus
+              Life</a></li>
+          <li><a href="#"
+              class="block px-3 py-2 text-sm font-semibold text-primary rounded-lg hover:bg-primary hover:text-accent1 transition-all">News</a>
+          </li>
+          <li><a href="#"
+              class="block px-4 py-2 text-sm font-bold rounded-full border-2 border-accent2 bg-accent2 text-primary hover:bg-primary hover:text-accent2 hover:border-primary transition-all ml-1">Apply
+              Now</a></li>
+        </ul>
+      </nav>
+
+      <!-- Mobile: Apply button + hamburger -->
+      <div class="lg:hidden ml-auto flex items-center gap-2">
+        <a href="#"
+          class="px-3 py-1.5 text-xs font-bold rounded-full bg-accent2 text-primary border-2 border-accent2 hover:bg-primary hover:text-accent2 transition-all">Apply</a>
+        <button id="mob-toggle"
+          class="p-2 rounded-xl border-2 border-primary/15 text-primary hover:bg-primary/5 transition-colors"
+          aria-label="Menu">
+          <svg id="icon-open" class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+          <svg id="icon-close" class="w-5 h-5 hidden" fill="none" stroke="currentColor" stroke-width="2"
+            viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- ── Mobile Drawer ── -->
+    <div id="mob-menu" class="hidden lg:hidden bg-white border-t border-gray-100 overflow-y-auto"
+      style="max-height: calc(100vh - 64px)">
+      <div class="px-4 py-3 space-y-0.5">
+
+        <a href="#"
+          class="flex items-center gap-3 px-4 py-3 rounded-xl text-primary font-semibold text-sm hover:bg-primary/5 active:bg-primary/10">🏠
+          Home</a>
+
+        <!-- About accordion -->
+        <div>
+          <button onclick="toggleMob('mob-about', this)"
+            class="w-full flex items-center justify-between px-4 py-3 rounded-xl text-primary font-semibold text-sm hover:bg-primary/5">
+            <span>🏛 About</span><span class="text-xs opacity-40 transition-transform duration-200">▾</span>
+          </button>
+          <div id="mob-about" class="mob-sub pl-3 space-y-0.5 pb-1">
+            <a href="#" class="block px-4 py-2 text-sm text-gray-600 rounded-xl hover:bg-primary/5">History &amp;
+              Background</a>
+            <a href="#" class="block px-4 py-2 text-sm text-gray-600 rounded-xl hover:bg-primary/5">Vision, Mission
+              &amp; Goals</a>
+            <a href="#" class="block px-4 py-2 text-sm text-gray-600 rounded-xl hover:bg-primary/5">Administration</a>
+            <a href="#" class="block px-4 py-2 text-sm text-gray-600 rounded-xl hover:bg-primary/5">Accreditations</a>
+          </div>
+        </div>
+
+        <!-- Academics accordion -->
+        <div>
+          <button onclick="toggleMob('mob-acad', this)"
+            class="w-full flex items-center justify-between px-4 py-3 rounded-xl text-primary font-semibold text-sm hover:bg-primary/5">
+            <span>🎓 Academics</span><span class="text-xs opacity-40 transition-transform duration-200">▾</span>
+          </button>
+          <div id="mob-acad" class="mob-sub pl-3 space-y-0.5 pb-1">
+            <a href="#" class="block px-4 py-2 text-sm text-gray-600 rounded-xl hover:bg-primary/5">Programs Offered</a>
+            <a href="#" class="block px-4 py-2 text-sm text-gray-600 rounded-xl hover:bg-primary/5">Academic
+              Calendar</a>
+            <a href="#" class="block px-4 py-2 text-sm text-gray-600 rounded-xl hover:bg-primary/5">Curriculum &amp;
+              Syllabi</a>
+            <a href="#" class="block px-4 py-2 text-sm text-gray-600 rounded-xl hover:bg-primary/5">Research &amp;
+              Publications</a>
+          </div>
+        </div>
+
+        <!-- Admissions accordion -->
+        <div>
+          <button onclick="toggleMob('mob-adm', this)"
+            class="w-full flex items-center justify-between px-4 py-3 rounded-xl text-primary font-semibold text-sm hover:bg-primary/5">
+            <span>📋 Admissions</span><span class="text-xs opacity-40 transition-transform duration-200">▾</span>
+          </button>
+          <div id="mob-adm" class="mob-sub pl-3 space-y-0.5 pb-1">
+            <a href="#" class="block px-4 py-2 text-sm text-gray-600 rounded-xl hover:bg-primary/5">How to Apply</a>
+            <a href="#" class="block px-4 py-2 text-sm text-gray-600 rounded-xl hover:bg-primary/5">Requirements</a>
+            <a href="#" class="block px-4 py-2 text-sm text-gray-600 rounded-xl hover:bg-primary/5">Scholarships &amp;
+              Grants</a>
+            <a href="#" class="block px-4 py-2 text-sm text-gray-600 rounded-xl hover:bg-primary/5">Tuition &amp;
+              Fees</a>
+          </div>
+        </div>
+
+        <a href="#"
+          class="flex items-center gap-3 px-4 py-3 rounded-xl text-primary font-semibold text-sm hover:bg-primary/5">🌿
+          Campus Life</a>
+        <a href="#"
+          class="flex items-center gap-3 px-4 py-3 rounded-xl text-primary font-semibold text-sm hover:bg-primary/5">📰
+          News &amp; Events</a>
+
+        <div class="pt-2 pb-2 px-1">
+          <a href="#"
+            class="block w-full text-center bg-primary text-accent2 font-bold py-3 rounded-xl text-sm hover:bg-secondary transition-colors">Enroll
+            Now →</a>
+        </div>
+
+        <!-- Mobile contact info -->
+        <div class="border-t border-gray-100 pt-3 pb-2 px-3 flex flex-wrap gap-x-4 gap-y-1 text-xs text-gray-400">
+          <a href="tel:+63344712345" class="hover:text-primary transition-colors">📞 (034) 471-2345</a>
+          <a href="mailto:info@kcc.edu.ph" class="hover:text-primary transition-colors">✉ info@kcc.edu.ph</a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ══════════════════════════════════════════════
+     HERO
+══════════════════════════════════════════════ -->
+  <section class="bg-primary relative overflow-hidden bg-hatch" style="min-height: 100svh">
+    <div class="max-w-7xl mx-auto flex flex-col lg:flex-row min-h-screen lg:min-h-0" style="min-height: inherit">
+
+      <!-- Left: content -->
+      <div
+        class="relative z-10 flex-1 flex flex-col justify-center px-6 sm:px-10 lg:pl-12 xl:pl-20 lg:pr-8 pt-14 pb-10 lg:py-28 animate-fadeUp">
+
+        <div
+          class="inline-flex items-center gap-2 border border-accent2/40 bg-accent2/10 rounded-full px-4 py-1.5 text-accent2 text-xs font-bold tracking-widest uppercase w-fit mb-5">
+          ✝ &nbsp;Enrollment Open — A.Y. 2025–2026
+        </div>
+
+        <h1 class="font-main font-black text-white leading-tight mb-4 text-4xl sm:text-5xl xl:text-6xl">
+          Forming<br />
+          <span class="text-accent2">Faith-Inspired</span><br />
+          Leaders
+        </h1>
+
+        <p class="text-accent1/80 text-base sm:text-lg leading-relaxed max-w-md mb-8">
+          Kabankalan Catholic College Inc. has been nurturing minds and shaping character in Negros Occidental for over
+          90 years — rooted in Catholic tradition, driven by academic excellence.
+        </p>
+
+        <div class="flex flex-wrap gap-3">
+          <a href="#"
+            class="px-6 sm:px-7 py-3 bg-accent2 text-primary font-bold rounded-xl text-sm hover:bg-accent1 hover:-translate-y-0.5 hover:shadow-lg transition-all duration-200">Enroll
+            Now</a>
+          <a href="#"
+            class="px-6 sm:px-7 py-3 border-2 border-accent1/40 text-accent1 font-semibold rounded-xl text-sm hover:bg-accent1/10 hover:border-accent2 hover:text-accent2 transition-all duration-200">Explore
+            Programs</a>
+        </div>
+
+        <!-- Mobile-only stat strip -->
+        <div class="grid grid-cols-4 gap-2 mt-8 lg:hidden">
+          <div class="bg-white/8 border border-accent1/10 rounded-xl p-2.5 sm:p-3 text-center">
+            <div class="font-main font-black text-accent2 text-lg sm:text-xl leading-none">90+</div>
+            <div class="text-accent1/60 text-xs mt-0.5">Years</div>
+          </div>
+          <div class="bg-white/8 border border-accent1/10 rounded-xl p-2.5 sm:p-3 text-center">
+            <div class="font-main font-black text-accent2 text-lg sm:text-xl leading-none">4.2K</div>
+            <div class="text-accent1/60 text-xs mt-0.5">Students</div>
+          </div>
+          <div class="bg-white/8 border border-accent1/10 rounded-xl p-2.5 sm:p-3 text-center">
+            <div class="font-main font-black text-accent2 text-lg sm:text-xl leading-none">280+</div>
+            <div class="text-accent1/60 text-xs mt-0.5">Faculty</div>
+          </div>
+          <div class="bg-white/8 border border-accent1/10 rounded-xl p-2.5 sm:p-3 text-center">
+            <div class="font-main font-black text-accent2 text-lg sm:text-xl leading-none">18+</div>
+            <div class="text-accent1/60 text-xs mt-0.5">Programs</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: floating stats card (desktop only) -->
+      <div
+        class="hidden lg:flex hero-panel-right bg-secondary flex-1 items-center justify-center relative bg-dot animate-fadeUpD">
+        <div
+          class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-80 rounded-full border border-accent1/10 pointer-events-none">
+        </div>
+        <div
+          class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-56 h-56 rounded-full border border-accent1/8 pointer-events-none">
+        </div>
+        <div
+          class="animate-float relative z-10 bg-white/8 border border-accent1/20 backdrop-blur-sm rounded-2xl p-8 text-center max-w-xs w-full mx-8 shadow-2xl">
+          <div class="font-main font-black text-accent2 text-7xl leading-none mb-1">90<span class="text-5xl">+</span>
+          </div>
+          <div class="text-accent1 text-xs font-bold tracking-widest uppercase mb-6">Years of Excellence</div>
+          <div class="grid grid-cols-2 gap-3">
+            <div class="bg-white/5 border border-accent1/10 rounded-xl p-3">
+              <div class="font-main font-bold text-accent2 text-2xl">4,200+</div>
+              <div class="text-accent1/70 text-xs uppercase tracking-wider mt-0.5">Students</div>
+            </div>
+            <div class="bg-white/5 border border-accent1/10 rounded-xl p-3">
+              <div class="font-main font-bold text-accent2 text-2xl">280+</div>
+              <div class="text-accent1/70 text-xs uppercase tracking-wider mt-0.5">Faculty</div>
+            </div>
+            <div class="bg-white/5 border border-accent1/10 rounded-xl p-3">
+              <div class="font-main font-bold text-accent2 text-2xl">18+</div>
+              <div class="text-accent1/70 text-xs uppercase tracking-wider mt-0.5">Programs</div>
+            </div>
+            <div class="bg-white/5 border border-accent1/10 rounded-xl p-3">
+              <div class="font-main font-bold text-accent2 text-lg">CHED</div>
+              <div class="text-accent1/70 text-xs uppercase tracking-wider mt-0.5">Accredited</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════
+     ANNOUNCEMENTS TICKER
+══════════════════════════════════════════════ -->
+  <div class="bg-accent2 relative overflow-hidden py-2.5">
+    <div
+      class="absolute left-0 top-0 bottom-0 bg-primary z-10 flex items-center px-3 sm:px-5 text-accent2 text-xs font-black tracking-widest uppercase whitespace-nowrap">
+      📢&nbsp;<span class="hidden sm:inline">News</span>
+    </div>
+    <div class="ticker-track flex whitespace-nowrap animate-ticker" style="padding-left:64px">
+      <span class="px-5 sm:px-8 text-sm font-semibold text-primary">Enrollment for A.Y. 2025–2026 is now OPEN — Visit
+        the Registrar's Office ✦</span>
+      <span class="px-5 sm:px-8 text-sm font-semibold text-primary">2nd Semester Final Examinations: March 10–14, 2025
+        ✦</span>
+      <span class="px-5 sm:px-8 text-sm font-semibold text-primary">KCC Foundation Day Celebration — April 5, 2025
+        ✦</span>
+      <span class="px-5 sm:px-8 text-sm font-semibold text-primary">Scholarship applications now accepted until March 31
+        ✦</span>
+      <span class="px-5 sm:px-8 text-sm font-semibold text-primary">New Graduate Programs available starting June 2025
+        ✦</span>
+      <!-- Duplicate for seamless loop -->
+      <span class="px-5 sm:px-8 text-sm font-semibold text-primary">Enrollment for A.Y. 2025–2026 is now OPEN — Visit
+        the Registrar's Office ✦</span>
+      <span class="px-5 sm:px-8 text-sm font-semibold text-primary">2nd Semester Final Examinations: March 10–14, 2025
+        ✦</span>
+      <span class="px-5 sm:px-8 text-sm font-semibold text-primary">KCC Foundation Day Celebration — April 5, 2025
+        ✦</span>
+      <span class="px-5 sm:px-8 text-sm font-semibold text-primary">Scholarship applications now accepted until March 31
+        ✦</span>
+      <span class="px-5 sm:px-8 text-sm font-semibold text-primary">New Graduate Programs available starting June 2025
+        ✦</span>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════
+     QUICK LINKS
+══════════════════════════════════════════════ -->
+  <section class="bg-slate-50 py-10 sm:py-14 px-4 sm:px-6 reveal">
+    <div class="max-w-7xl mx-auto">
+      <div class="grid grid-cols-3 sm:grid-cols-3 lg:grid-cols-6 gap-2.5 sm:gap-4">
+        <a href="#"
+          class="quick-card block bg-white rounded-xl sm:rounded-2xl p-3 sm:p-5 text-center border-2 border-transparent shadow-sm">
+          <div
+            class="w-9 h-9 sm:w-14 sm:h-14 bg-primary rounded-xl sm:rounded-2xl flex items-center justify-center mx-auto mb-2 sm:mb-3 text-base sm:text-2xl">
+            📋</div>
+          <h3 class="font-bold text-primary text-xs sm:text-sm leading-tight">Online Enrollment</h3>
+          <p class="text-gray-400 text-xs mt-0.5 hidden sm:block">A.Y. 2025–2026</p>
+        </a>
+        <a href="#"
+          class="quick-card block bg-white rounded-xl sm:rounded-2xl p-3 sm:p-5 text-center border-2 border-transparent shadow-sm">
+          <div
+            class="w-9 h-9 sm:w-14 sm:h-14 bg-primary rounded-xl sm:rounded-2xl flex items-center justify-center mx-auto mb-2 sm:mb-3 text-base sm:text-2xl">
+            📚</div>
+          <h3 class="font-bold text-primary text-xs sm:text-sm leading-tight">Student Portal</h3>
+          <p class="text-gray-400 text-xs mt-0.5 hidden sm:block">Grades &amp; records</p>
+        </a>
+        <a href="#"
+          class="quick-card block bg-white rounded-xl sm:rounded-2xl p-3 sm:p-5 text-center border-2 border-transparent shadow-sm">
+          <div
+            class="w-9 h-9 sm:w-14 sm:h-14 bg-primary rounded-xl sm:rounded-2xl flex items-center justify-center mx-auto mb-2 sm:mb-3 text-base sm:text-2xl">
+            📅</div>
+          <h3 class="font-bold text-primary text-xs sm:text-sm leading-tight">Calendar</h3>
+          <p class="text-gray-400 text-xs mt-0.5 hidden sm:block">Key dates</p>
+        </a>
+        <a href="#"
+          class="quick-card block bg-white rounded-xl sm:rounded-2xl p-3 sm:p-5 text-center border-2 border-transparent shadow-sm">
+          <div
+            class="w-9 h-9 sm:w-14 sm:h-14 bg-primary rounded-xl sm:rounded-2xl flex items-center justify-center mx-auto mb-2 sm:mb-3 text-base sm:text-2xl">
+            💰</div>
+          <h3 class="font-bold text-primary text-xs sm:text-sm leading-tight">Scholarships</h3>
+          <p class="text-gray-400 text-xs mt-0.5 hidden sm:block">Grants &amp; aid</p>
+        </a>
+        <a href="#"
+          class="quick-card block bg-white rounded-xl sm:rounded-2xl p-3 sm:p-5 text-center border-2 border-transparent shadow-sm">
+          <div
+            class="w-9 h-9 sm:w-14 sm:h-14 bg-primary rounded-xl sm:rounded-2xl flex items-center justify-center mx-auto mb-2 sm:mb-3 text-base sm:text-2xl">
+            🎓</div>
+          <h3 class="font-bold text-primary text-xs sm:text-sm leading-tight">Programs</h3>
+          <p class="text-gray-400 text-xs mt-0.5 hidden sm:block">All degrees</p>
+        </a>
+        <a href="#"
+          class="quick-card block bg-white rounded-xl sm:rounded-2xl p-3 sm:p-5 text-center border-2 border-transparent shadow-sm">
+          <div
+            class="w-9 h-9 sm:w-14 sm:h-14 bg-primary rounded-xl sm:rounded-2xl flex items-center justify-center mx-auto mb-2 sm:mb-3 text-base sm:text-2xl">
+            📞</div>
+          <h3 class="font-bold text-primary text-xs sm:text-sm leading-tight">Contact</h3>
+          <p class="text-gray-400 text-xs mt-0.5 hidden sm:block">Get in touch</p>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════
+     NEWS & EVENTS
+══════════════════════════════════════════════ -->
+  <section class="py-14 sm:py-20 px-4 sm:px-6 reveal">
+    <div class="max-w-7xl mx-auto">
+      <div class="mb-8 sm:mb-10">
+        <span
+          class="inline-block bg-accent1 text-primary text-xs font-black tracking-widest uppercase px-3 py-1 rounded mb-3">Latest
+          Updates</span>
+        <h2 class="font-main font-bold text-primary text-3xl sm:text-4xl mb-2 sm:mb-3">News &amp; Events</h2>
+        <p class="text-gray-500 max-w-xl leading-relaxed text-sm sm:text-base">Stay informed with the latest happenings
+          across the KCC campus community.</p>
+      </div>
+
+      <div class="grid lg:grid-cols-5 gap-4 sm:gap-5">
+        <!-- Featured Article -->
+        <div
+          class="lg:col-span-3 bg-primary rounded-2xl overflow-hidden relative flex flex-col justify-end p-5 sm:p-8 cursor-pointer group"
+          style="min-height: 280px">
+          <div class="absolute inset-0 bg-gradient-to-t from-primary via-primary/60 to-transparent z-10"></div>
+          <div class="absolute inset-0 flex items-center justify-center opacity-10 text-7xl sm:text-8xl">🎓</div>
+          <div class="relative z-20">
+            <span
+              class="inline-block bg-accent2 text-primary text-xs font-black uppercase tracking-wider px-3 py-1 rounded mb-2 sm:mb-3">Featured</span>
+            <h3 class="font-main font-bold text-white text-lg sm:text-2xl leading-snug mb-2">KCC Launches New
+              Engineering Technology Program for 2025</h3>
+            <p class="text-accent1/75 text-sm leading-relaxed mb-2 sm:mb-3 hidden sm:block">In response to growing
+              industry demand, KCC introduces its newest bachelor's degree in Engineering Technology, equipping
+              graduates with practical skills.</p>
+            <div class="flex flex-wrap gap-3 text-accent1 text-xs">
+              <span>📅 February 10, 2025</span>
+              <span class="hidden sm:inline">👤 Communications Office</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- News List -->
+        <div class="lg:col-span-2 grid sm:grid-cols-2 lg:grid-cols-1 gap-3">
+          <a href="#" class="news-card flex gap-3 sm:gap-4 bg-white p-3 sm:p-4 rounded-xl border-l-4 shadow-sm"
+            style="border-left-color:#05285E">
+            <div class="flex-shrink-0 text-center min-w-10">
+              <div class="font-main font-black text-primary text-2xl leading-none">18</div>
+              <div class="text-gray-400 text-xs uppercase font-bold">Feb</div>
+            </div>
+            <div>
+              <h4 class="font-bold text-primary text-xs sm:text-sm mb-0.5 leading-tight">KCC Students Win Regional Quiz
+                Bee Championship</h4>
+              <p class="text-gray-400 text-xs leading-relaxed hidden sm:block">Three students brought home gold in the
+                Regional Science Quiz Bee.</p>
+            </div>
+          </a>
+          <a href="#" class="news-card flex gap-3 sm:gap-4 bg-white p-3 sm:p-4 rounded-xl border-l-4 shadow-sm"
+            style="border-left-color:#FEE773">
+            <div class="flex-shrink-0 text-center min-w-10">
+              <div class="font-main font-black text-primary text-2xl leading-none">15</div>
+              <div class="text-gray-400 text-xs uppercase font-bold">Feb</div>
+            </div>
+            <div>
+              <h4 class="font-bold text-primary text-xs sm:text-sm mb-0.5 leading-tight">Library Expansion Project
+                Completed</h4>
+              <p class="text-gray-400 text-xs leading-relaxed hidden sm:block">KCC Central Library now features expanded
+                digital resources and new study areas.</p>
+            </div>
+          </a>
+          <a href="#" class="news-card flex gap-3 sm:gap-4 bg-white p-3 sm:p-4 rounded-xl border-l-4 shadow-sm"
+            style="border-left-color:#05285E">
+            <div class="flex-shrink-0 text-center min-w-10">
+              <div class="font-main font-black text-primary text-2xl leading-none">08</div>
+              <div class="text-gray-400 text-xs uppercase font-bold">Feb</div>
+            </div>
+            <div>
+              <h4 class="font-bold text-primary text-xs sm:text-sm mb-0.5 leading-tight">Annual Recollection Day for All
+                Departments</h4>
+              <p class="text-gray-400 text-xs leading-relaxed hidden sm:block">Faculty and staff gathered for the annual
+                Ash Wednesday recollection.</p>
+            </div>
+          </a>
+          <a href="#" class="news-card flex gap-3 sm:gap-4 bg-white p-3 sm:p-4 rounded-xl border-l-4 shadow-sm"
+            style="border-left-color:#FEE773">
+            <div class="flex-shrink-0 text-center min-w-10">
+              <div class="font-main font-black text-primary text-2xl leading-none">02</div>
+              <div class="text-gray-400 text-xs uppercase font-bold">Feb</div>
+            </div>
+            <div>
+              <h4 class="font-bold text-primary text-xs sm:text-sm mb-0.5 leading-tight">KCC Signs MOU with Local
+                Government for NSTP</h4>
+              <p class="text-gray-400 text-xs leading-relaxed hidden sm:block">New MOU strengthens community outreach
+                programs.</p>
+            </div>
+          </a>
+        </div>
+      </div>
+      <div class="mt-5 text-right">
+        <a href="#"
+          class="text-sm font-semibold text-primary hover:text-secondary underline underline-offset-4 transition-colors">View
+          all news &amp; events →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════
+     PROGRAMS OFFERED
+══════════════════════════════════════════════ -->
+  <section class="bg-primary py-14 sm:py-20 px-4 sm:px-6 bg-dot reveal">
+    <div class="max-w-7xl mx-auto">
+      <div class="mb-8 sm:mb-10">
+        <span
+          class="inline-block bg-accent2 text-primary text-xs font-black tracking-widest uppercase px-3 py-1 rounded mb-3">Academic
+          Excellence</span>
+        <h2 class="font-main font-bold text-white text-3xl sm:text-4xl mb-2 sm:mb-3">Programs Offered</h2>
+        <p class="text-accent1/70 max-w-xl leading-relaxed text-sm sm:text-base">Choose from CHED-recognized programs
+          designed to prepare you for a meaningful career.</p>
+      </div>
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
+        <div
+          class="prog-card bg-white/5 border border-accent1/15 rounded-2xl p-5 sm:p-7 hover:bg-white/10 hover:border-accent1/30 hover:-translate-y-1 transition-all duration-200 cursor-pointer">
+          <span
+            class="inline-block bg-accent2/15 text-accent2 text-xs font-bold uppercase tracking-wider px-2.5 py-1 rounded mb-3 sm:mb-4">College
+            of Education</span>
+          <h3 class="font-main font-bold text-white text-base sm:text-lg mb-2">Bachelor of Elementary Education</h3>
+          <p class="text-accent1/60 text-xs sm:text-sm leading-relaxed">Develop future educators with comprehensive
+            pedagogical skills and strong moral foundations.</p>
+          <a href="#"
+            class="inline-flex items-center gap-1 mt-4 text-accent2 text-xs sm:text-sm font-semibold hover:text-accent1 transition-colors">Learn
+            more →</a>
+        </div>
+        <div
+          class="prog-card bg-white/5 border border-accent1/15 rounded-2xl p-5 sm:p-7 hover:bg-white/10 hover:border-accent1/30 hover:-translate-y-1 transition-all duration-200 cursor-pointer">
+          <span
+            class="inline-block bg-accent2/15 text-accent2 text-xs font-bold uppercase tracking-wider px-2.5 py-1 rounded mb-3 sm:mb-4">College
+            of Business</span>
+          <h3 class="font-main font-bold text-white text-base sm:text-lg mb-2">Bachelor of Science in Accountancy
+          </h3>
+          <p class="text-accent1/60 text-xs sm:text-sm leading-relaxed">Rigorous preparation for CPA licensure exams and
+            careers in finance and management.</p>
+          <a href="#"
+            class="inline-flex items-center gap-1 mt-4 text-accent2 text-xs sm:text-sm font-semibold hover:text-accent1 transition-colors">Learn
+            more →</a>
+        </div>
+        <div
+          class="prog-card bg-white/5 border border-accent1/15 rounded-2xl p-5 sm:p-7 hover:bg-white/10 hover:border-accent1/30 hover:-translate-y-1 transition-all duration-200 cursor-pointer">
+          <span
+            class="inline-block bg-accent2/15 text-accent2 text-xs font-bold uppercase tracking-wider px-2.5 py-1 rounded mb-3 sm:mb-4">College
+            of Nursing</span>
+          <h3 class="font-main font-bold text-white text-base sm:text-lg mb-2">Bachelor of Science in Nursing</h3>
+          <p class="text-accent1/60 text-xs sm:text-sm leading-relaxed">Producing compassionate, competent nurses ready
+            for local and global healthcare settings.</p>
+          <a href="#"
+            class="inline-flex items-center gap-1 mt-4 text-accent2 text-xs sm:text-sm font-semibold hover:text-accent1 transition-colors">Learn
+            more →</a>
+        </div>
+        <div
+          class="prog-card bg-white/5 border border-accent1/15 rounded-2xl p-5 sm:p-7 hover:bg-white/10 hover:border-accent1/30 hover:-translate-y-1 transition-all duration-200 cursor-pointer">
+          <span
+            class="inline-block bg-accent2/15 text-accent2 text-xs font-bold uppercase tracking-wider px-2.5 py-1 rounded mb-3 sm:mb-4">College
+            of IT</span>
+          <h3 class="font-main font-bold text-white text-base sm:text-lg mb-2">BS in Information Technology</h3>
+          <p class="text-accent1/60 text-xs sm:text-sm leading-relaxed">Cutting-edge skills in software development,
+            networking, cybersecurity, and data management.</p>
+          <a href="#"
+            class="inline-flex items-center gap-1 mt-4 text-accent2 text-xs sm:text-sm font-semibold hover:text-accent1 transition-colors">Learn
+            more →</a>
+        </div>
+        <div
+          class="prog-card bg-white/5 border border-accent1/15 rounded-2xl p-5 sm:p-7 hover:bg-white/10 hover:border-accent1/30 hover:-translate-y-1 transition-all duration-200 cursor-pointer">
+          <span
+            class="inline-block bg-accent2/15 text-accent2 text-xs font-bold uppercase tracking-wider px-2.5 py-1 rounded mb-3 sm:mb-4">College
+            of Criminology</span>
+          <h3 class="font-main font-bold text-white text-base sm:text-lg mb-2">BS in Criminology</h3>
+          <p class="text-accent1/60 text-xs sm:text-sm leading-relaxed">Training future law enforcement officers and
+            justice system professionals.</p>
+          <a href="#"
+            class="inline-flex items-center gap-1 mt-4 text-accent2 text-xs sm:text-sm font-semibold hover:text-accent1 transition-colors">Learn
+            more →</a>
+        </div>
+        <div
+          class="prog-card bg-white/5 border border-accent1/15 rounded-2xl p-5 sm:p-7 hover:bg-white/10 hover:border-accent1/30 hover:-translate-y-1 transition-all duration-200 cursor-pointer">
+          <span
+            class="inline-block bg-accent2/15 text-accent2 text-xs font-bold uppercase tracking-wider px-2.5 py-1 rounded mb-3 sm:mb-4">Graduate
+            School</span>
+          <h3 class="font-main font-bold text-white text-base sm:text-lg mb-2">Master of Arts in Education</h3>
+          <p class="text-accent1/60 text-xs sm:text-sm leading-relaxed">Advance your career in educational leadership,
+            curriculum development, and research.</p>
+          <a href="#"
+            class="inline-flex items-center gap-1 mt-4 text-accent2 text-xs sm:text-sm font-semibold hover:text-accent1 transition-colors">Learn
+            more →</a>
+        </div>
+      </div>
+      <div class="mt-8 text-center">
+        <a href="#"
+          class="inline-block border-2 border-accent2 text-accent2 font-bold px-6 sm:px-8 py-3 rounded-xl text-sm hover:bg-accent2 hover:text-primary transition-all duration-200">View
+          All Programs</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════
+     VISION MISSION CORE VALUES
+══════════════════════════════════════════════ -->
+  <section class="py-14 sm:py-20 px-4 sm:px-6 reveal">
+    <div class="max-w-7xl mx-auto">
+      <div class="text-center mb-10 sm:mb-12">
+        <span
+          class="inline-block bg-accent1 text-primary text-xs font-black tracking-widest uppercase px-3 py-1 rounded mb-3">Our
+          Foundation</span>
+        <h2 class="font-main font-bold text-primary text-3xl sm:text-4xl">Vision, Mission &amp; Core Values</h2>
+      </div>
+      <div class="grid sm:grid-cols-2 gap-4 sm:gap-5 mb-4 sm:mb-5">
+        <!-- Vision -->
+        <div class="bg-primary rounded-2xl p-6 sm:p-10 relative overflow-hidden">
+          <div
+            class="absolute bottom-0 right-0 w-32 h-32 sm:w-40 sm:h-40 border-2 border-accent1/10 rounded-full translate-x-10 translate-y-10 pointer-events-none">
+          </div>
+          <div class="text-4xl sm:text-5xl mb-4">👁️</div>
+          <h3 class="font-main font-bold text-accent2 text-xl sm:text-2xl mb-3 sm:mb-4">Our Vision</h3>
+          <p class="text-accent1/80 leading-relaxed text-sm sm:text-base relative z-10">Kabankalan Catholic College
+            envisions itself as a premier Catholic institution of higher learning in Western Visayas, committed to
+            forming competent, morally upright, and socially responsible graduates who are agents of integral human
+            development.</p>
+        </div>
+        <!-- Mission -->
+        <div class="bg-secondary rounded-2xl p-6 sm:p-10 relative overflow-hidden">
+          <div
+            class="absolute bottom-0 right-0 w-32 h-32 sm:w-40 sm:h-40 border-2 border-accent1/10 rounded-full translate-x-10 translate-y-10 pointer-events-none">
+          </div>
+          <div class="text-4xl sm:text-5xl mb-4">🎯</div>
+          <h3 class="font-main font-bold text-accent2 text-xl sm:text-2xl mb-3 sm:mb-4">Our Mission</h3>
+          <p class="text-accent1/80 leading-relaxed text-sm sm:text-base relative z-10">KCC is committed to providing
+            quality Catholic education that integrates academic excellence with formation in Gospel values, community
+            service, and innovation — producing graduates who serve God, the Church, and the Filipino nation with
+            integrity.</p>
+        </div>
+      </div>
+      <!-- Core Values -->
+      <div class="bg-accent1 rounded-2xl p-6 sm:p-10">
+        <h3 class="font-main font-bold text-primary text-xl sm:text-2xl text-center mb-5 sm:mb-7">Our Core Values
+        </h3>
+        <div class="flex flex-wrap justify-center gap-2 sm:gap-3">
+          <div
+            class="value-pill px-4 sm:px-5 py-2 sm:py-2.5 rounded-full border-2 border-primary bg-white text-primary font-bold text-xs sm:text-sm cursor-default">
+            ✝ Faith</div>
+          <div
+            class="value-pill px-4 sm:px-5 py-2 sm:py-2.5 rounded-full border-2 border-primary bg-white text-primary font-bold text-xs sm:text-sm cursor-default">
+            🏛 Excellence</div>
+          <div
+            class="value-pill px-4 sm:px-5 py-2 sm:py-2.5 rounded-full border-2 border-primary bg-white text-primary font-bold text-xs sm:text-sm cursor-default">
+            🤝 Service</div>
+          <div
+            class="value-pill px-4 sm:px-5 py-2 sm:py-2.5 rounded-full border-2 border-primary bg-white text-primary font-bold text-xs sm:text-sm cursor-default">
+            💡 Innovation</div>
+          <div
+            class="value-pill px-4 sm:px-5 py-2 sm:py-2.5 rounded-full border-2 border-primary bg-white text-primary font-bold text-xs sm:text-sm cursor-default">
+            ⚖ Integrity</div>
+          <div
+            class="value-pill px-4 sm:px-5 py-2 sm:py-2.5 rounded-full border-2 border-primary bg-white text-primary font-bold text-xs sm:text-sm cursor-default">
+            🌿 Compassion</div>
+          <div
+            class="value-pill px-4 sm:px-5 py-2 sm:py-2.5 rounded-full border-2 border-primary bg-white text-primary font-bold text-xs sm:text-sm cursor-default">
+            🤲 Community</div>
+          <div
+            class="value-pill px-4 sm:px-5 py-2 sm:py-2.5 rounded-full border-2 border-primary bg-white text-primary font-bold text-xs sm:text-sm cursor-default">
+            🌟 Leadership</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════
+     ADMISSIONS BANNER
+══════════════════════════════════════════════ -->
+  <section class="px-4 sm:px-6 pb-14 sm:pb-20 reveal">
+    <div class="max-w-7xl mx-auto">
+      <div
+        class="rounded-2xl sm:rounded-3xl p-6 sm:p-10 md:p-14 flex flex-col md:flex-row gap-6 md:gap-10 items-start md:items-center justify-between relative overflow-hidden"
+        style="background: linear-gradient(135deg, #FEE773 0%, #FAE9A1 100%)">
+        <div
+          class="absolute right-8 top-1/2 -translate-y-1/2 text-primary/5 font-black font-main leading-none select-none hidden md:block"
+          style="font-size:9rem">✝</div>
+        <div class="relative z-10 flex-1">
+          <h2 class="font-main font-black text-primary text-2xl sm:text-3xl md:text-4xl mb-2">Now Enrolling for A.Y.
+            2025–2026</h2>
+          <p class="text-secondary text-sm sm:text-lg mb-5">Begin your KCC journey today. Slots are limited — apply
+            early!</p>
+          <a href="#"
+            class="inline-block bg-primary text-accent2 font-bold px-6 sm:px-8 py-3 rounded-xl text-sm hover:bg-secondary transition-colors shadow-md">Start
+            Application</a>
+        </div>
+        <div class="relative z-10 flex flex-wrap gap-2 sm:gap-3 w-full md:w-auto">
+          <div class="flex items-center gap-2 sm:gap-3 bg-primary/10 rounded-full px-3 sm:px-5 py-2 sm:py-2.5">
+            <div
+              class="w-6 h-6 sm:w-7 sm:h-7 bg-primary text-accent2 rounded-full flex items-center justify-center font-black text-xs flex-shrink-0">
+              1</div>
+            <span class="text-primary font-semibold text-xs sm:text-sm">Submit Requirements</span>
+          </div>
+          <div class="flex items-center gap-2 sm:gap-3 bg-primary/10 rounded-full px-3 sm:px-5 py-2 sm:py-2.5">
+            <div
+              class="w-6 h-6 sm:w-7 sm:h-7 bg-primary text-accent2 rounded-full flex items-center justify-center font-black text-xs flex-shrink-0">
+              2</div>
+            <span class="text-primary font-semibold text-xs sm:text-sm">Take Entrance Exam</span>
+          </div>
+          <div class="flex items-center gap-2 sm:gap-3 bg-primary/10 rounded-full px-3 sm:px-5 py-2 sm:py-2.5">
+            <div
+              class="w-6 h-6 sm:w-7 sm:h-7 bg-primary text-accent2 rounded-full flex items-center justify-center font-black text-xs flex-shrink-0">
+              3</div>
+            <span class="text-primary font-semibold text-xs sm:text-sm">Pay &amp; Enroll</span>
+          </div>
+          <div class="flex items-center gap-2 sm:gap-3 bg-primary/10 rounded-full px-3 sm:px-5 py-2 sm:py-2.5">
+            <div
+              class="w-6 h-6 sm:w-7 sm:h-7 bg-primary text-accent2 rounded-full flex items-center justify-center font-black text-xs flex-shrink-0">
+              4</div>
+            <span class="text-primary font-semibold text-xs sm:text-sm">Start Classes</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════
+     EVENTS CALENDAR
+══════════════════════════════════════════════ -->
+  <section class="bg-slate-50 py-14 sm:py-20 px-4 sm:px-6 reveal">
+    <div class="max-w-7xl mx-auto">
+      <div class="mb-8 sm:mb-10">
+        <span
+          class="inline-block bg-accent1 text-primary text-xs font-black tracking-widest uppercase px-3 py-1 rounded mb-3">Upcoming</span>
+        <h2 class="font-main font-bold text-primary text-3xl sm:text-4xl">Events Calendar</h2>
+      </div>
+      <div class="grid lg:grid-cols-5 gap-5">
+
+        <!-- Mini Calendar -->
+        <div class="lg:col-span-2 bg-primary rounded-2xl p-5 sm:p-6">
+          <div class="flex justify-between items-center mb-4 sm:mb-5">
+            <h3 class="font-main font-bold text-accent2 text-lg sm:text-xl" id="cal-month-label">February 2025</h3>
+            <div class="flex gap-2">
+              <button onclick="changeMonth(-1)"
+                class="w-8 h-8 bg-accent2/10 border border-accent2/20 text-accent1 rounded-lg text-sm hover:bg-accent2/20 transition-colors">‹</button>
+              <button onclick="changeMonth(1)"
+                class="w-8 h-8 bg-accent2/10 border border-accent2/20 text-accent1 rounded-lg text-sm hover:bg-accent2/20 transition-colors">›</button>
+            </div>
+          </div>
+          <div class="grid grid-cols-7 mb-2">
+            <span class="text-center text-xs text-accent1 font-bold uppercase tracking-wider py-1">Su</span>
+            <span class="text-center text-xs text-accent1 font-bold uppercase tracking-wider py-1">Mo</span>
+            <span class="text-center text-xs text-accent1 font-bold uppercase tracking-wider py-1">Tu</span>
+            <span class="text-center text-xs text-accent1 font-bold uppercase tracking-wider py-1">We</span>
+            <span class="text-center text-xs text-accent1 font-bold uppercase tracking-wider py-1">Th</span>
+            <span class="text-center text-xs text-accent1 font-bold uppercase tracking-wider py-1">Fr</span>
+            <span class="text-center text-xs text-accent1 font-bold uppercase tracking-wider py-1">Sa</span>
+          </div>
+          <div class="grid grid-cols-7 gap-0.5" id="cal-grid"></div>
+        </div>
+
+        <!-- Events List -->
+        <div class="lg:col-span-3 grid sm:grid-cols-2 lg:grid-cols-1 gap-3 sm:gap-4">
+          <div class="bg-white rounded-2xl p-4 sm:p-5 flex gap-3 sm:gap-4 border-l-4 shadow-sm"
+            style="border-left-color:#05285E">
+            <div class="bg-primary text-accent2 rounded-xl px-2.5 py-2 text-center flex-shrink-0 min-w-12 sm:min-w-14">
+              <div class="font-main font-black text-xl sm:text-2xl leading-none">24</div>
+              <div class="text-xs font-bold uppercase tracking-wide">Feb</div>
+            </div>
+            <div>
+              <h4 class="font-bold text-primary text-sm mb-1">Foundation Day Mass &amp; Celebration</h4>
+              <p class="text-gray-400 text-xs leading-relaxed">Annual commemorative mass. All are invited to join.</p>
+              <span
+                class="inline-block mt-1.5 bg-green-50 text-green-700 text-xs font-bold uppercase tracking-wider px-2 py-0.5 rounded">Religious</span>
+            </div>
+          </div>
+          <div class="bg-white rounded-2xl p-4 sm:p-5 flex gap-3 sm:gap-4 border-l-4 shadow-sm"
+            style="border-left-color:#FEE773">
+            <div class="bg-primary text-accent2 rounded-xl px-2.5 py-2 text-center flex-shrink-0 min-w-12 sm:min-w-14">
+              <div class="font-main font-black text-xl sm:text-2xl leading-none">10</div>
+              <div class="text-xs font-bold uppercase tracking-wide">Mar</div>
+            </div>
+            <div>
+              <h4 class="font-bold text-primary text-sm mb-1">2nd Semester Final Examinations</h4>
+              <p class="text-gray-400 text-xs leading-relaxed">March 10–14. Check schedules on student portal.</p>
+              <span
+                class="inline-block mt-1.5 bg-blue-50 text-blue-700 text-xs font-bold uppercase tracking-wider px-2 py-0.5 rounded">Academic</span>
+            </div>
+          </div>
+          <div class="bg-white rounded-2xl p-4 sm:p-5 flex gap-3 sm:gap-4 border-l-4 shadow-sm"
+            style="border-left-color:#05285E">
+            <div class="bg-primary text-accent2 rounded-xl px-2.5 py-2 text-center flex-shrink-0 min-w-12 sm:min-w-14">
+              <div class="font-main font-black text-xl sm:text-2xl leading-none">22</div>
+              <div class="text-xs font-bold uppercase tracking-wide">Mar</div>
+            </div>
+            <div>
+              <h4 class="font-bold text-primary text-sm mb-1">Career Fair &amp; Job Expo 2025</h4>
+              <p class="text-gray-400 text-xs leading-relaxed">Top companies. Open to graduating students.</p>
+              <span
+                class="inline-block mt-1.5 bg-yellow-50 text-yellow-700 text-xs font-bold uppercase tracking-wider px-2 py-0.5 rounded">Campus
+                Life</span>
+            </div>
+          </div>
+          <div class="bg-white rounded-2xl p-4 sm:p-5 flex gap-3 sm:gap-4 border-l-4 shadow-sm"
+            style="border-left-color:#FEE773">
+            <div class="bg-primary text-accent2 rounded-xl px-2.5 py-2 text-center flex-shrink-0 min-w-12 sm:min-w-14">
+              <div class="font-main font-black text-xl sm:text-2xl leading-none">05</div>
+              <div class="text-xs font-bold uppercase tracking-wide">Apr</div>
+            </div>
+            <div>
+              <h4 class="font-bold text-primary text-sm mb-1">KCC Grand Foundation Day</h4>
+              <p class="text-gray-400 text-xs leading-relaxed">Cultural shows, sports events &amp; community outreach.
+              </p>
+              <span
+                class="inline-block mt-1.5 bg-yellow-50 text-yellow-700 text-xs font-bold uppercase tracking-wider px-2 py-0.5 rounded">Campus
+                Life</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════
+     GALLERY
+══════════════════════════════════════════════ -->
+  <section class="py-14 sm:py-20 px-4 sm:px-6 reveal">
+    <div class="max-w-7xl mx-auto">
+      <div class="flex flex-wrap items-end justify-between mb-7 sm:mb-8 gap-4">
+        <div>
+          <span
+            class="inline-block bg-accent1 text-primary text-xs font-black tracking-widest uppercase px-3 py-1 rounded mb-3">Campus
+            Life</span>
+          <h2 class="font-main font-bold text-primary text-3xl sm:text-4xl">Life at KCC</h2>
+        </div>
+        <a href="#"
+          class="text-sm font-semibold text-primary hover:text-secondary underline underline-offset-4 transition-colors">View
+          full gallery →</a>
+      </div>
+
+      <!-- Mobile/Tablet: simple uniform grid -->
+      <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 lg:hidden">
+        <div class="gallery-item rounded-xl overflow-hidden relative cursor-pointer" style="aspect-ratio:1">
+          <div class="gallery-img w-full h-full flex items-center justify-center text-5xl"
+            style="background:linear-gradient(135deg,#05285E,#18396F)">🏛️</div>
+          <div
+            class="gallery-overlay absolute inset-0 bg-primary/70 flex items-center justify-center text-accent1 font-bold text-xs uppercase tracking-widest">
+            Campus</div>
+        </div>
+        <div class="gallery-item rounded-xl overflow-hidden relative cursor-pointer" style="aspect-ratio:1">
+          <div class="gallery-img w-full h-full flex items-center justify-center text-5xl"
+            style="background:linear-gradient(135deg,#18396F,#2a5298)">🎓</div>
+          <div
+            class="gallery-overlay absolute inset-0 bg-primary/70 flex items-center justify-center text-accent1 font-bold text-xs uppercase tracking-widest">
+            Graduation</div>
+        </div>
+        <div class="gallery-item rounded-xl overflow-hidden relative cursor-pointer" style="aspect-ratio:1">
+          <div class="gallery-img w-full h-full flex items-center justify-center text-5xl"
+            style="background:linear-gradient(135deg,#1e3d6f,#18396F)">⛪</div>
+          <div
+            class="gallery-overlay absolute inset-0 bg-primary/70 flex items-center justify-center text-accent1 font-bold text-xs uppercase tracking-widest">
+            Chapel</div>
+        </div>
+        <div class="gallery-item rounded-xl overflow-hidden relative cursor-pointer" style="aspect-ratio:1">
+          <div class="gallery-img w-full h-full flex items-center justify-center text-5xl"
+            style="background:linear-gradient(135deg,#05285E,#0e3d6b)">🏆</div>
+          <div
+            class="gallery-overlay absolute inset-0 bg-primary/70 flex items-center justify-center text-accent1 font-bold text-xs uppercase tracking-widest">
+            Achievements</div>
+        </div>
+        <div class="gallery-item rounded-xl overflow-hidden relative cursor-pointer col-span-2 sm:col-span-1"
+          style="aspect-ratio:2/1">
+          <div class="gallery-img w-full h-full flex items-center justify-center text-5xl"
+            style="background:linear-gradient(135deg,#18396F,#05285E)">🔬</div>
+          <div
+            class="gallery-overlay absolute inset-0 bg-primary/70 flex items-center justify-center text-accent1 font-bold text-xs uppercase tracking-widest">
+            Laboratory</div>
+        </div>
+      </div>
+
+      <!-- Desktop: asymmetric grid -->
+      <div class="hidden lg:grid grid-cols-4 gap-3" style="grid-template-rows: 200px 200px">
+        <div class="gallery-item col-span-2 row-span-2 rounded-2xl overflow-hidden relative cursor-pointer">
+          <div class="gallery-img w-full h-full flex items-center justify-center text-8xl"
+            style="background:linear-gradient(135deg,#05285E,#18396F)">🏛️</div>
+          <div
+            class="gallery-overlay absolute inset-0 bg-primary/70 flex items-center justify-center text-accent1 font-bold tracking-widest uppercase text-sm">
+            Campus Buildings</div>
+        </div>
+        <div class="gallery-item rounded-2xl overflow-hidden relative cursor-pointer">
+          <div class="gallery-img w-full h-full flex items-center justify-center text-4xl"
+            style="background:linear-gradient(135deg,#18396F,#2a5298)">🎓</div>
+          <div
+            class="gallery-overlay absolute inset-0 bg-primary/70 flex items-center justify-center text-accent1 font-bold text-xs uppercase tracking-widest">
+            Graduation</div>
+        </div>
+        <div class="gallery-item rounded-2xl overflow-hidden relative cursor-pointer">
+          <div class="gallery-img w-full h-full flex items-center justify-center text-4xl"
+            style="background:linear-gradient(135deg,#1e3d6f,#18396F)">⛪</div>
+          <div
+            class="gallery-overlay absolute inset-0 bg-primary/70 flex items-center justify-center text-accent1 font-bold text-xs uppercase tracking-widest">
+            Chapel</div>
+        </div>
+        <div class="gallery-item rounded-2xl overflow-hidden relative cursor-pointer">
+          <div class="gallery-img w-full h-full flex items-center justify-center text-4xl"
+            style="background:linear-gradient(135deg,#05285E,#0e3d6b)">🏆</div>
+          <div
+            class="gallery-overlay absolute inset-0 bg-primary/70 flex items-center justify-center text-accent1 font-bold text-xs uppercase tracking-widest">
+            Achievements</div>
+        </div>
+        <div class="gallery-item rounded-2xl overflow-hidden relative cursor-pointer">
+          <div class="gallery-img w-full h-full flex items-center justify-center text-4xl"
+            style="background:linear-gradient(135deg,#18396F,#05285E)">🔬</div>
+          <div
+            class="gallery-overlay absolute inset-0 bg-primary/70 flex items-center justify-center text-accent1 font-bold text-xs uppercase tracking-widest">
+            Laboratory</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════
+     FOOTER
+══════════════════════════════════════════════ -->
+  <footer class="bg-primary pt-12 sm:pt-16 px-4 sm:px-6">
+    <div
+      class="max-w-7xl mx-auto grid grid-cols-2 lg:grid-cols-4 gap-8 sm:gap-10 pb-10 sm:pb-12 border-b border-accent1/10">
+
+      <!-- Brand column spans full width on mobile -->
+      <div class="col-span-2 lg:col-span-1">
+        <div class="flex items-center gap-3 mb-4 sm:mb-5">
+          <img src="./assets/img/logo.png" alt="Logo" class="w-10 h-10 sm:w-14 sm:h-14 object-contain" />
+          <div>
+            <div class="font-main font-bold text-white text-sm leading-tight">Kabankalan Catholic College Inc.</div>
+            <div class="text-accent1 text-xs tracking-widest uppercase">Catholic Education, Our Identity, Our Mission
+            </div>
+          </div>
+        </div>
+        <p class="text-accent1/60 text-xs sm:text-sm leading-relaxed mb-4">Guided by Catholic values and academic
+          excellence, KCC has been shaping lives and communities in Negros Occidental since 1927.</p>
+        <div class="space-y-1.5 text-accent1/60 text-xs">
+          <div class="flex gap-2">📍 <span>Kabankalan City, Negros Occidental 6111</span></div>
+          <div class="flex gap-2">📞 <span>(034) 471-2345 / 471-6789</span></div>
+          <div class="flex gap-2">✉️ <span>info@kcc.edu.ph</span></div>
+          <div class="flex gap-2">🌐 <span>www.kcc.edu.ph</span></div>
+        </div>
+      </div>
+
+      <div>
+        <h4 class="font-main font-bold text-accent2 mb-3 sm:mb-4 text-sm sm:text-base">Academics</h4>
+        <ul class="space-y-2 list-none">
+          <li><a href="#" class="text-accent1/60 text-xs sm:text-sm hover:text-accent2 transition-colors">Programs
+              Offered</a></li>
+          <li><a href="#" class="text-accent1/60 text-xs sm:text-sm hover:text-accent2 transition-colors">Academic
+              Calendar</a></li>
+          <li><a href="#" class="text-accent1/60 text-xs sm:text-sm hover:text-accent2 transition-colors">Curriculum</a>
+          </li>
+          <li><a href="#" class="text-accent1/60 text-xs sm:text-sm hover:text-accent2 transition-colors">Graduate
+              School</a></li>
+          <li><a href="#" class="text-accent1/60 text-xs sm:text-sm hover:text-accent2 transition-colors">Research
+              Office</a></li>
+          <li><a href="#" class="text-accent1/60 text-xs sm:text-sm hover:text-accent2 transition-colors">Library</a>
+          </li>
+        </ul>
+      </div>
+
+      <div>
+        <h4 class="font-main font-bold text-accent2 mb-3 sm:mb-4 text-sm sm:text-base">Admissions</h4>
+        <ul class="space-y-2 list-none">
+          <li><a href="#" class="text-accent1/60 text-xs sm:text-sm hover:text-accent2 transition-colors">How to
+              Apply</a></li>
+          <li><a href="#"
+              class="text-accent1/60 text-xs sm:text-sm hover:text-accent2 transition-colors">Requirements</a></li>
+          <li><a href="#" class="text-accent1/60 text-xs sm:text-sm hover:text-accent2 transition-colors">Entrance
+              Exam</a></li>
+          <li><a href="#"
+              class="text-accent1/60 text-xs sm:text-sm hover:text-accent2 transition-colors">Scholarships</a></li>
+          <li><a href="#" class="text-accent1/60 text-xs sm:text-sm hover:text-accent2 transition-colors">Tuition &amp;
+              Fees</a></li>
+          <li><a href="#" class="text-accent1/60 text-xs sm:text-sm hover:text-accent2 transition-colors">FAQs</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4 class="font-main font-bold text-accent2 mb-3 sm:mb-4 text-sm sm:text-base">Quick Links</h4>
+        <ul class="space-y-2 list-none">
+          <li><a href="#" class="text-accent1/60 text-xs sm:text-sm hover:text-accent2 transition-colors">Student
+              Portal</a></li>
+          <li><a href="#" class="text-accent1/60 text-xs sm:text-sm hover:text-accent2 transition-colors">Faculty
+              Portal</a></li>
+          <li><a href="#" class="text-accent1/60 text-xs sm:text-sm hover:text-accent2 transition-colors">Registrar</a>
+          </li>
+          <li><a href="#" class="text-accent1/60 text-xs sm:text-sm hover:text-accent2 transition-colors">Campus Map</a>
+          </li>
+          <li><a href="#" class="text-accent1/60 text-xs sm:text-sm hover:text-accent2 transition-colors">Student
+              Organizations</a></li>
+          <li><a href="#" class="text-accent1/60 text-xs sm:text-sm hover:text-accent2 transition-colors">Alumni</a>
+          </li>
+        </ul>
+      </div>
+
+    </div>
+
+    <!-- Footer bottom bar -->
+    <div
+      class="max-w-7xl mx-auto py-4 sm:py-5 flex flex-col sm:flex-row justify-between items-center gap-3 text-accent1/40 text-xs text-center">
+      <div>
+        © 2025 Kabankalan Catholic College Inc. All rights reserved.
+        <a href="#" class="text-accent1/60 hover:text-accent2 ml-2 transition-colors">Privacy Policy</a>
+        <a href="#" class="text-accent1/60 hover:text-accent2 ml-2 transition-colors">Terms of Use</a>
+      </div>
+      <div class="flex gap-2">
+        <a href="#"
+          class="w-9 h-9 rounded-lg bg-accent1/8 border border-accent1/15 flex items-center justify-center text-accent1 hover:bg-accent2 hover:text-primary hover:border-accent2 transition-all text-sm font-bold">f</a>
+        <a href="#"
+          class="w-9 h-9 rounded-lg bg-accent1/8 border border-accent1/15 flex items-center justify-center text-accent1 hover:bg-accent2 hover:text-primary hover:border-accent2 transition-all text-sm">▶</a>
+        <a href="#"
+          class="w-9 h-9 rounded-lg bg-accent1/8 border border-accent1/15 flex items-center justify-center text-accent1 hover:bg-accent2 hover:text-primary hover:border-accent2 transition-all text-sm">✉</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ══════════════════════════════════════════════
+     BACK TO TOP
+══════════════════════════════════════════════ -->
+  <button id="back-top" onclick="window.scrollTo({top:0,behavior:'smooth'})"
+    class="fixed bottom-5 right-4 sm:bottom-6 sm:right-6 z-50 w-11 h-11 bg-primary text-accent2 rounded-full shadow-xl flex items-center justify-center text-lg hover:bg-secondary transition-all">
+    ↑
+  </button>
+
+  <!-- ══════════════════════════════════════════════
+     SCRIPTS
+══════════════════════════════════════════════ -->
+  <script>
+    // ── Desktop Dropdown (click-toggle, close on outside click) ──
+    function toggleDrop(btn) {
+      const li = btn.closest('[data-drop]');
+      const drop = li.querySelector('.dropdown');
+      const arrow = btn.querySelector('.drop-arrow');
+      const isOpen = drop.classList.contains('open');
+
+      // Close all other dropdowns first
+      closeAllDrops(li);
+
+      if (isOpen) {
+        drop.classList.remove('open');
+        if (arrow) arrow.style.transform = '';
+      } else {
+        drop.classList.add('open');
+        if (arrow) arrow.style.transform = 'rotate(180deg)';
+      }
+    }
+
+    function closeAllDrops(except) {
+      document.querySelectorAll('[data-drop]').forEach(li => {
+        if (li === except) return;
+        const d = li.querySelector('.dropdown');
+        const a = li.querySelector('.drop-arrow');
+        if (d) d.classList.remove('open');
+        if (a) a.style.transform = '';
+      });
+    }
+
+    // Close dropdowns when clicking anywhere outside the nav
+    document.addEventListener('click', e => {
+      if (!e.target.closest('[data-drop]')) closeAllDrops(null);
+    });
+
+    // Close dropdowns on Escape key
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') closeAllDrops(null);
+    });
+    const mobToggle = document.getElementById('mob-toggle');
+    const mobMenu = document.getElementById('mob-menu');
+    const iconOpen = document.getElementById('icon-open');
+    const iconClose = document.getElementById('icon-close');
+
+    mobToggle.addEventListener('click', () => {
+      const open = !mobMenu.classList.contains('hidden');
+      mobMenu.classList.toggle('hidden', open);
+      iconOpen.classList.toggle('hidden', !open);
+      iconClose.classList.toggle('hidden', open);
+    });
+
+    document.addEventListener('click', e => {
+      if (!mobToggle.contains(e.target) && !mobMenu.contains(e.target)) {
+        mobMenu.classList.add('hidden');
+        iconOpen.classList.remove('hidden');
+        iconClose.classList.add('hidden');
+      }
+    });
+
+    // ── Accordion ──
+    function toggleMob(id, btn) {
+      const el = document.getElementById(id);
+      const open = el.classList.contains('open');
+      document.querySelectorAll('.mob-sub').forEach(s => s.classList.remove('open'));
+      if (!open) el.classList.add('open');
+    }
+
+    // ── Calendar ──
+    let currentMonth = 1, currentYear = 2025;
+    const eventDays = [4, 5, 10, 13, 18, 24];
+    const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    const today = new Date();
+
+    function buildCalendar() {
+      document.getElementById('cal-month-label').textContent = `${months[currentMonth]} ${currentYear}`;
+      const firstDay = new Date(currentYear, currentMonth, 1).getDay();
+      const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+      const prevDays = new Date(currentYear, currentMonth, 0).getDate();
+      let html = '';
+
+      for (let i = firstDay - 1; i >= 0; i--)
+        html += `<div class="text-center py-1 text-xs text-accent1/25 rounded-lg">${prevDays - i}</div>`;
+
+      for (let d = 1; d <= daysInMonth; d++) {
+        const isToday = d === today.getDate() && currentMonth === today.getMonth() && currentYear === today.getFullYear();
+        const hasEvent = eventDays.includes(d) && currentMonth === 1 && currentYear === 2025;
+        let cls = 'text-center py-1 text-xs rounded-lg cursor-pointer transition-colors relative ';
+        cls += isToday ? 'bg-accent2 text-primary font-black ' :
+          hasEvent ? 'text-accent2 font-semibold hover:bg-accent2/10 ' :
+            'text-accent1/60 hover:bg-accent1/10 ';
+        const dot = hasEvent && !isToday ? '<span class="absolute bottom-0 left-1/2 -translate-x-1/2 w-1 h-1 bg-accent2 rounded-full"></span>' : '';
+        html += `<div class="${cls}">${d}${dot}</div>`;
+      }
+
+      const remaining = 42 - (firstDay + daysInMonth);
+      for (let d = 1; d <= remaining; d++)
+        html += `<div class="text-center py-1 text-xs text-accent1/25 rounded-lg">${d}</div>`;
+
+      document.getElementById('cal-grid').innerHTML = html;
+    }
+
+    function changeMonth(dir) {
+      currentMonth += dir;
+      if (currentMonth < 0) { currentMonth = 11; currentYear--; }
+      if (currentMonth > 11) { currentMonth = 0; currentYear++; }
+      buildCalendar();
+    }
+
+    buildCalendar();
+
+    // ── Scroll reveal ──
+    const observer = new IntersectionObserver(entries =>
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); }),
+      { threshold: 0.08 }
+    );
+    document.querySelectorAll('.reveal').forEach(r => observer.observe(r));
+
+    // ── Back to top ──
+    const backTop = document.getElementById('back-top');
+    window.addEventListener('scroll', () => {
+      backTop.classList.toggle('show', window.scrollY > 400);
+      document.querySelector('header').style.boxShadow =
+        window.scrollY > 10 ? '0 4px 30px rgba(5,40,94,0.18)' : '';
+    });
+  </script>
+</body>
+
+</html>
